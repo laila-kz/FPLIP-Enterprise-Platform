@@ -96,7 +96,7 @@ services:
       - ${GOOGLE_APPLICATION_CREDENTIALS}:/secrets/key.json:ro
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/secrets/key.json
-      - GCP_PROJECT_ID=flip-dev-503300
+      - GCP_PROJECT_ID=${GCP_PROJECT_ID:-your-gcp-project-id}
       - GOLD_DATASET=fplip_gold
       - CACHE_TTL_SECONDS=14400
     depends_on:

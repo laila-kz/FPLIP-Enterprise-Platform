@@ -28,7 +28,7 @@ class Settings:
     cache_ttl_seconds: int = int(os.getenv("CACHE_TTL_SECONDS", "14400"))
     
     # API Key (app-level authentication)
-    api_key: str = os.getenv("API_KEY", "wWVNVdiQB20rLf0xu4RV9ZntWT_EH-mYY6LXSyfZ500")
+    api_key: str = os.getenv("API_KEY", "")
 
 
 @lru_cache
