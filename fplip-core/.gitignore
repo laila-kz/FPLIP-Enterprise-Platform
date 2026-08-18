@@ -1,0 +1,60 @@
+# Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+terraform.tfvars
+
+# GCP credentials
+*-key.json
+secrets/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Python virtual environment
+.venv*/
+venv*/
+env*/
+.env*/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment
+.env
+.venv-fplip/
+
+# OS
+.DS_Store
+
+data_static/
+data/
+e3ewe
+
+# dbt
+dbt/dbt_packages/
+dbt/logs/
+dbt/target/
+dbt/fplip/dbt_packages/
+dbt/fplip/logs/
+dbt/fplip/target/
+
+# Python virtual environment
+.venv*/
+venv*/
+env*/
+
+# OS
+.DS_Store
+Thumbs.db
+
+git # dbt artifacts
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+logs/

@@ -1,0 +1,33 @@
+source_name: "shift_master"
+description: "Shift Master — shift pattern definitions"
+owner: "HR / Production Planning"
+contact: "TBD"
+update_frequency: "static"
+freshness_sla_hours: 168
+confidence: "unconfirmed"
+
+schema:
+  - name: "shift_id"
+    type: "STRING"
+    nullable: false
+    description: "Unique shift identifier"
+  - name: "shift_name"
+    type: "STRING"
+    nullable: false
+    description: "Descriptive shift name"
+  - name: "start_time"
+    type: "TIME"
+    nullable: false
+    description: "Shift start (local time)"
+  - name: "end_time"
+    type: "TIME"
+    nullable: false
+    description: "Shift end (local time)"
+  - name: "crosses_midnight"
+    type: "BOOLEAN"
+    nullable: false
+    description: "Whether the shift spans two calendar dates"
+  - name: "active_flag"
+    type: "BOOLEAN"
+    nullable: false
+    description: "Whether this shift pattern is currently in use"

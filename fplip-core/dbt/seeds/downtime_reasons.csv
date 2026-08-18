@@ -1,0 +1,6 @@
+reason_id,reason_name,reason_category,oee_loss_category,description,active_flag,_ingested_at,_source_file
+DT-CHG-01,Product Changeover,Changeover,Availability Loss,Time to switch products,true,2026-07-25 00:00:00,ci-seed.csv
+DT-MAINT-01,Scheduled Maintenance,Maintenance,Availability Loss,Planned maintenance,true,2026-07-25 00:00:00,ci-seed.csv
+DT-MAT-01,Material Shortage,Material Shortage,Availability Loss,Lack of raw materials,true,2026-07-25 00:00:00,ci-seed.csv
+DT-SLOW-01,Slow Running,Unplanned,Performance Loss,Running below ideal speed,true,2026-07-25 00:00:00,ci-seed.csv
+DT-UNPL-01,Power Outage,Unplanned,Availability Loss,Electrical failure,true,2026-07-25 00:00:00,ci-seed.csv

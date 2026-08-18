@@ -1,0 +1,5 @@
+log_reference_number,machine_id,shift_id,product_id,run_date,run_sequence_number,run_start_time,run_end_time,planned_units,produced_units,good_units,operator_id,notes,data_entry_method,entered_by,entered_at,_ingested_at,_source_file
+LOG-CI-001,M01,S1,P-BLOCK-01,2026-07-25,1,2026-07-25 06:00:00,2026-07-25 08:00:00,500,480,460,EMP-0001,CI test run,Manual,EMP-0001,2026-07-25 08:30:00,2026-07-25 00:00:00,ci-seed.csv
+LOG-CI-002,M01,S1,P-BLOCK-01,2026-07-25,2,2026-07-25 11:00:00,2026-07-25 13:30:00,600,580,550,EMP-0002,Multi-run test - run 2,Manual,EMP-0002,2026-07-25 14:00:00,2026-07-25 00:00:00,ci-seed.csv
+LOG-CI-003,M02,S1,P-BLOCK-02,2026-07-25,1,2026-07-25 06:00:00,2026-07-25 08:30:00,400,380,360,EMP-0003,CI test run,Manual,EMP-0003,2026-07-25 09:00:00,2026-07-25 00:00:00,ci-seed.csv
+LOG-CI-004,M01,S2,P-BLOCK-01,2026-07-25,1,2026-07-25 14:30:00,2026-07-25 17:00:00,450,430,410,EMP-0004,Afternoon shift run,Manual,EMP-0004,2026-07-25 17:30:00,2026-07-25 00:00:00,ci-seed.csv

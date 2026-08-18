@@ -1,0 +1,21 @@
+product_id,product_name,product_family,unit_of_measure,standard_cycle_time_sec,cycle_time_source,cycle_time_confidence,standard_weight_kg,active_flag,data_entry_method,created_at,last_updated_at,_ingested_at,_source_file
+P-BLOCK-01,Hollow Block 20x20x40,Concrete Block,unit,15,Manufacturing Engineering Estimate,estimated,18.50,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-BLOCK-02,Solid Block 15x20x40,Concrete Block,unit,18,Manufacturer Spec,verified,22.00,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-BLOCK-03,Hollow Block 25x25x40,Concrete Block,unit,20,Manufacturing Engineering Estimate,estimated,25.00,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-BLOCK-04,Solid Block 20x20x40,Concrete Block,unit,17,Manufacturer Spec,verified,20.00,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-BLOCK-05,Hollow Block 15x20x40,Concrete Block,unit,14,Manufacturing Engineering Estimate,estimated,16.00,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-BLOCK-06,Solid Block 25x25x40,Concrete Block,unit,19,Manufacturer Spec,verified,28.00,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-BLOCK-07,Hollow Block 30x30x40,Concrete Block,unit,22,Manufacturing Engineering Estimate,estimated,30.00,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-BLOCK-08,Solid Block 30x30x40,Concrete Block,unit,24,Manufacturer Spec,verified,35.00,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-BLOCK-09,Hollow Block 20x20x30,Concrete Block,unit,13,Manufacturing Engineering Estimate,estimated,14.00,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-BLOCK-10,Solid Block 20x20x30,Concrete Block,unit,16,Manufacturer Spec,verified,16.00,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-PAVE-01,Pavement Tile 30x30,Pavement Block,unit,12,Manufacturing Engineering Estimate,estimated,10.00,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-PAVE-02,Pavement Tile 40x40,Pavement Block,unit,14,Manufacturer Spec,verified,15.00,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-PAVE-03,Pavement Tile 50x50,Pavement Block,unit,17,Manufacturing Engineering Estimate,estimated,20.00,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-PAVE-04,Pavement Tile 30x60,Pavement Block,unit,11,Manufacturer Spec,verified,12.00,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-PAVE-05,Pavement Tile 40x60,Pavement Block,unit,15,Manufacturing Engineering Estimate,estimated,18.00,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-ZEL-01,Zellige 10x10,Zellige,piece,8,Manufacturer Spec,verified,0.50,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-ZEL-02,Zellige 15x15,Zellige,piece,10,Manufacturing Engineering Estimate,estimated,0.70,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-ZEL-03,Zellige 20x20,Zellige,piece,12,Manufacturer Spec,verified,1.00,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-ZEL-04,Zellige 25x25,Zellige,piece,14,Manufacturing Engineering Estimate,estimated,1.20,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv
+P-ZEL-05,Zellige 30x30,Zellige,piece,16,Manufacturer Spec,verified,1.50,true,Manual,2025-11-02 10:00:00,2026-07-25 00:00:00,2026-07-25 00:00:00,ci-seed.csv

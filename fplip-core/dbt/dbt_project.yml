@@ -1,0 +1,65 @@
+name: 'fplip'
+version: '1.0.0'
+config-version: 2
+
+profile: 'fplip'
+
+model-paths: ["models"]
+test-paths: ["tests"]
+snapshot-paths: ["snapshots"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+
+models:
+  fplip:
+    bronze:
+      +materialized: view
+    silver:
+      +materialized: table
+    gold:
+      +materialized: table
+      +schema: gold
+
+
+seeds:
+  fplip:
+    +schema: "{{ var('bronze_dataset', 'fplip_bronze') }}"
+    +quote_columns: true
+    production_runs:
+      +column_types:
+        run_date: date
+        run_start_time: timestamp
+        run_end_time: timestamp
+        entered_at: timestamp
+        _ingested_at: timestamp
+    downtime_events:
+      +column_types:
+        event_date: date
+        start_time: timestamp
+        end_time: timestamp
+        entered_at: timestamp
+        _ingested_at: timestamp
+    qc_inspections:
+      +column_types:
+        inspection_date: date
+        entered_at: timestamp
+        _ingested_at: timestamp
+    machines:
+      +column_types:
+        install_date: date
+        last_updated_at: timestamp
+        _ingested_at: timestamp
+    products:
+      +column_types:
+        created_at: timestamp
+        last_updated_at: timestamp
+        _ingested_at: timestamp
+    shifts:
+      +column_types:
+        _ingested_at: timestamp
+    downtime_reasons:
+      +column_types:
+        _ingested_at: timestamp
+    defect_types:
+      +column_types:
+        _ingested_at: timestamp

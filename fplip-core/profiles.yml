@@ -1,0 +1,13 @@
+fplip:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('GCP_PROJECT_ID', 'flip-dev-503300') }}"
+      dataset: "{{ env_var('DBT_BIGQUERY_DATASET', 'fplip') }}"
+      threads: 1
+      location: US
+      priority: interactive
+      timeout_seconds: 300
+      retries: 1

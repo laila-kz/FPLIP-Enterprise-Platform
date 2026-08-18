@@ -1,0 +1,10 @@
+.env
+*.json
+*.key
+.git
+.gitignore
+.github
+.venv*
+__pycache__
+*.pyc
+*.pyo

@@ -1,0 +1,73 @@
+source_name: "production"
+description: "Production Run Log — core transactional record of what was produced"
+owner: "Production Department"
+contact: "TBD"
+update_frequency: "daily"
+freshness_sla_hours: 24
+confidence: "unconfirmed"
+
+schema:
+  - name: "log_reference_number"
+    type: "STRING"
+    nullable: true
+    description: "Physical paper form's own ticket number, if any"
+  - name: "machine_id"
+    type: "STRING"
+    nullable: false
+    description: "Machine that ran the production"
+  - name: "shift_id"
+    type: "STRING"
+    nullable: false
+    description: "Shift during which the run occurred"
+  - name: "product_id"
+    type: "STRING"
+    nullable: false
+    description: "Product produced"
+  - name: "run_date"
+    type: "DATE"
+    nullable: false
+    description: "Calendar date of the run"
+  - name: "run_sequence_number"
+    type: "INTEGER"
+    nullable: false
+    description: "Distinguishes multiple runs per machine/shift/product/day"
+  - name: "run_start_time"
+    type: "TIMESTAMP"
+    nullable: true
+    description: "Run start time"
+  - name: "run_end_time"
+    type: "TIMESTAMP"
+    nullable: true
+    description: "Run end time"
+  - name: "planned_units"
+    type: "INTEGER"
+    nullable: true
+    description: "Units the shift plan expected from this run"
+  - name: "produced_units"
+    type: "INTEGER"
+    nullable: false
+    description: "Total units produced in the run"
+  - name: "good_units"
+    type: "INTEGER"
+    nullable: false
+    description: "Units meeting spec, self-reported by operator"
+  - name: "operator_id"
+    type: "STRING"
+    nullable: true
+    description: "Internal badge/employee code"
+  - name: "notes"
+    type: "STRING"
+    nullable: true
+    description: "Free-text operator notes"
+  - name: "data_entry_method"
+    type: "STRING"
+    nullable: false
+    description: "Capture method: Manual, ERP Export"
+  - name: "entered_by"
+    type: "STRING"
+    nullable: false
+    description: "Badge code of transcriber"
+  - name: "entered_at"
+    type: "TIMESTAMP"
+    nullable: false
+    description: "Entry timestamp"

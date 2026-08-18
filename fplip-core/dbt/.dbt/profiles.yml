@@ -1,0 +1,14 @@
+fplip:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: flip-dev-503300
+      dataset: fplip_silver
+      keyfile: /opt/airflow/secrets/ingestion-sa-key.json
+      location: US
+      threads: 1
+      timeout_seconds: 300
+      priority: interactive
+      retries: 1

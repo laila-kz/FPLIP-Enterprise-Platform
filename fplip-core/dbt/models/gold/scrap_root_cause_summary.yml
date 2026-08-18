@@ -1,0 +1,109 @@
+version: 2
+
+models:
+  - name: scrap_root_cause_summary
+    description: |
+      Scrap Root Cause Summary — one row per machine/shift/product/defect-type.
+      Analyzes scrap by defect type to identify root causes.
+      
+      Grain: (machine_id, shift_id, date_id, product_id, defect_type_id)
+    
+    config:
+      contract:
+        enforced: true
+    
+    columns:
+      - name: machine_id
+        description: "Machine identifier"
+        data_type: STRING
+        constraints:
+          - type: not_null
+      
+      - name: shift_id
+        description: "Shift identifier"
+        data_type: STRING
+        constraints:
+          - type: not_null
+      
+      - name: date_id
+        description: "Date of the inspection"
+        data_type: DATE
+        constraints:
+          - type: not_null
+      
+      - name: product_id
+        description: "Product identifier"
+        data_type: STRING
+        constraints:
+          - type: not_null
+      
+      - name: defect_type_id
+        description: "Defect type identifier (PASS for passed inspections)"
+        data_type: STRING
+        constraints:
+          - type: not_null
+      
+      - name: defect_name
+        description: "Descriptive defect name"
+        data_type: STRING
+        constraints:
+          - type: not_null
+      
+      - name: defect_category
+        description: "High-level defect category (or 'N/A - Pass')"
+        data_type: STRING
+        constraints:
+          - type: not_null
+      
+      - name: severity
+        description: "Defect severity (Minor, Major, Critical, None)"
+        data_type: STRING
+        constraints:
+          - type: not_null
+      
+      - name: total_units_inspected
+        description: "Total units inspected in this group"
+        data_type: INT64
+        constraints:
+          - type: not_null
+      
+      - name: total_units_rejected
+        description: "Total units rejected in this group"
+        data_type: INT64
+        constraints:
+          - type: not_null
+      
+      - name: rejection_rate
+        description: "Rejection rate = total_units_rejected / total_units_inspected"
+        data_type: FLOAT64
+      
+      - name: total_scrap_units
+        description: "Total scrap units from production runs (produced - good)"
+        data_type: INT64
+      
+      - name: scrap_percentage
+        description: "Scrap percentage = scrap_units / produced_units"
+        data_type: FLOAT64
+      
+      - name: inspection_count
+        description: "Number of inspections in this group"
+        data_type: INT64
+        constraints:
+          - type: not_null
+      
+      - name: _updated_at
+        description: "Timestamp when this row was last updated"
+        data_type: TIMESTAMP
+        constraints:
+          - type: not_null
+
+    tests:
+      - accepted_values:
+          name: assert_defect_category_values
+          values: ['Dimensional', 'Visual', 'Structural', 'Material', 'Other', 'N/A - Pass']
+          column_name: defect_category
+      
+      - accepted_values:
+          name: assert_severity_values
+          values: ['Minor', 'Major', 'Critical', 'None']
+          column_name: severity

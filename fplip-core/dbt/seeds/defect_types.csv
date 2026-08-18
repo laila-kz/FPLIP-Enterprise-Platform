@@ -1,0 +1,5 @@
+defect_type_id,defect_name,defect_category,severity,description,active_flag,_ingested_at,_source_file
+DEF-DIM-01,Dimension Out of Spec,Dimensional,Major,Product dimensions outside tolerance,true,2026-07-25 00:00:00,ci-seed.csv
+DEF-VIS-01,Surface Crack,Visual,Major,Visible cracks on surface,true,2026-07-25 00:00:00,ci-seed.csv
+DEF-STRUCT-01,Structural Weakness,Structural,Critical,Structural integrity failure,true,2026-07-25 00:00:00,ci-seed.csv
+DEF-MAT-01,Material Inconsistency,Material,Major,Inconsistent material properties,true,2026-07-25 00:00:00,ci-seed.csv

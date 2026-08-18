@@ -1,0 +1,107 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: fplip-airflow-metadata
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - airflow-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U airflow"]
+      interval: 5s
+      retries: 5
+
+  airflow-init:
+    image: apache/airflow:2.9.3
+    container_name: fplip-airflow-init
+    user: root
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      GOOGLE_APPLICATION_CREDENTIALS: /opt/airflow/secrets/ingestion-sa-key.json
+      AIRFLOW__WEBSERVER__SECRET_KEY: "this-is-a-fixed-secret-key-for-local-dev"  # <-- ADD THIS
+      PYTHONPATH: /opt/airflow  # <-- ADD THIS IF NOT ALREADY THERE
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./ingestion:/opt/airflow/ingestion
+      - ./contracts:/opt/airflow/contracts
+      - ./secrets:/opt/airflow/secrets:ro
+      - ./data:/opt/airflow/data
+      - ./dbt:/opt/airflow/dbt
+      - airflow-venv:/opt/airflow/.venv-fplip
+    entrypoint: /bin/bash
+    command:  -c "python -m venv /opt/airflow/.venv-fplip && /opt/airflow/.venv-fplip/bin/pip install --upgrade pip && /opt/airflow/.venv-fplip/bin/pip install dbt-core dbt-bigquery && chown -R airflow:root /opt/airflow/.venv-fplip && chmod -R o+rX /opt/airflow/.venv-fplip && airflow db migrate && airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com"
+  
+  airflow-webserver:
+    image: apache/airflow:2.9.3
+    container_name: fplip-airflow-webserver
+    depends_on:
+      - airflow-init
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      GOOGLE_APPLICATION_CREDENTIALS: /opt/airflow/secrets/ingestion-sa-key.json
+      AIRFLOW__WEBSERVER__SECRET_KEY: "this-is-a-fixed-secret-key-for-local-dev"  # <-- ADD THIS
+      PYTHONPATH: /opt/airflow  # <-- ADD THIS
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./ingestion:/opt/airflow/ingestion
+      - ./contracts:/opt/airflow/contracts
+      - ./secrets:/opt/airflow/secrets:ro
+      - ./data:/opt/airflow/data
+      - ./dbt:/opt/airflow/dbt
+      - ./dbt/.dbt:/home/airflow/.dbt:ro
+      - airflow-venv:/opt/airflow/.venv-fplip
+    ports:
+      - "8080:8080"
+    command: webserver
+
+  airflow-scheduler:
+    image: apache/airflow:2.9.3
+    container_name: fplip-airflow-scheduler
+    depends_on:
+      - airflow-init
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      GOOGLE_APPLICATION_CREDENTIALS: /opt/airflow/secrets/ingestion-sa-key.json
+      AIRFLOW__WEBSERVER__SECRET_KEY: "this-is-a-fixed-secret-key-for-local-dev"  # <-- ADD THIS
+      PYTHONPATH: /opt/airflow  # <-- ADD THIS
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./ingestion:/opt/airflow/ingestion
+      - ./contracts:/opt/airflow/contracts
+      - ./secrets:/opt/airflow/secrets:ro
+      - ./data:/opt/airflow/data
+      - ./dbt:/opt/airflow/dbt
+      - ./dbt/.dbt:/home/airflow/.dbt:ro
+      - airflow-venv:/opt/airflow/.venv-fplip
+    command: scheduler
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: fplip-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ${GOOGLE_APPLICATION_CREDENTIALS}:/secrets/key.json:ro
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/secrets/key.json
+      - GCP_PROJECT_ID=flip-dev-503300
+      - GOLD_DATASET=fplip_gold
+      - CACHE_TTL_SECONDS=14400
+    depends_on:
+      - airflow-init  # Not a real dependency, just ensures networks are set up
+
+volumes:
+  airflow-db-data:
+  airflow-venv:

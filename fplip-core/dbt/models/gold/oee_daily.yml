@@ -1,0 +1,386 @@
+version: 2
+
+models:
+  - name: oee_daily
+    description: |
+      OEE Daily — one row per machine per shift per day.
+      Computes Availability, Performance, Quality, and OEE.
+      Also includes loss attribution breakdown.
+    
+    config:
+      contract:
+        enforced: true
+    
+    columns:
+      - name: machine_id
+        description: "Machine identifier (e.g., M01)"
+        data_type: STRING
+        constraints:
+          - type: not_null
+      
+      - name: shift_id
+        description: "Shift identifier (S1, S2, S3)"
+        data_type: STRING
+        constraints:
+          - type: not_null
+      
+      - name: date_id
+        description: "Date of the shift (YYYY-MM-DD)"
+        data_type: DATE
+        constraints:
+          - type: not_null
+      
+      - name: availability
+        description: |
+          Availability = (shift_duration - downtime) / shift_duration.
+          Range: 0 to 1. NULL if shift_duration = 0.
+        data_type: FLOAT64
+      
+      - name: shift_duration_sec
+        description: "Total scheduled shift duration in seconds"
+        data_type: INT64
+      
+      - name: total_downtime_sec
+        description: "Total downtime seconds logged for this machine/shift/day"
+        data_type: INT64
+      
+      - name: performance
+        description: |
+          Performance = duration-weighted average of run-level Performance.
+          Performance = SUM(run_performance * run_duration) / SUM(run_duration).
+          NULL if no valid runs exist.
+        data_type: FLOAT64
+      
+      - name: quality
+        description: "Quality = SUM(good_units) / SUM(produced_units). Range: 0 to 1."
+        data_type: FLOAT64
+      
+      - name: oee
+        description: "OEE = Availability * Performance * Quality. Range: 0 to 1. NULL if any component is NULL."
+        data_type: FLOAT64
+      
+      - name: cycle_time_confidence
+        description: |
+          Confidence level for cycle time data.
+          Values: 'verified', 'estimated', 'unconfirmed'.
+          Carried through from dim_product.
+        data_type: STRING
+        constraints:
+          - type: not_null
+      
+      - name: availability_loss_sec
+        description: |
+          Downtime seconds attributed to Availability loss.
+          Uses oee_loss_category = 'Availability Loss' from dim_downtime_reason.
+        data_type: INT64
+        constraints:
+          - type: not_null
+      
+      - name: performance_loss_sec
+        description: |
+          Downtime seconds attributed to Performance loss.
+          Uses oee_loss_category = 'Performance Loss' from dim_downtime_reason.
+        data_type: INT64
+        constraints:
+          - type: not_null
+      
+      - name: unmapped_loss_sec
+        description: |
+          Downtime seconds with no mapped reason_id (unmapped or missing).
+          These are valid by design (paper-based logging).
+        data_type: INT64
+        constraints:
+          - type: not_null
+      
+      - name: total_loss_sec
+        description: "Total loss seconds = availability_loss + performance_loss + unmapped_loss. Should equal total_downtime_sec."
+        data_type: INT64
+
+unit_tests:
+  # ============================================================
+  # Test 1: Clean Case (Baseline)
+  # ============================================================
+  - name: test_oee_clean_case
+    description: "Normal case: one machine, one shift, one run with valid data"
+    model: oee_daily
+    given:
+      - input: ref('dim_machine')
+        rows:
+          - {machine_id: 'M01', machine_name: 'Test Machine'}
+      - input: ref('dim_shift')
+        rows:
+          - {shift_id: 'S1', shift_name: 'Morning', start_time: '06:00:00', end_time: '14:00:00', crosses_midnight: false}
+      - input: ref('dim_product')
+        rows:
+          - {product_id: 'P-001', standard_cycle_time_sec: 10.0, cycle_time_confidence: 'verified'}
+      - input: ref('fct_production_run')
+        rows:
+          - {
+              machine_id: 'M01',
+              shift_id: 'S1',
+              product_id: 'P-001',
+              run_date: '2026-01-01',
+              run_sequence_number: 1,
+              run_start_time: '2026-01-01 06:00:00',
+              run_end_time: '2026-01-01 08:00:00',
+              produced_units: 500,
+              good_units: 480
+            }
+      - input: ref('fct_downtime_event')
+        rows:
+          - {
+              machine_id: 'M01',
+              shift_id: 'S1',
+              event_date: '2026-01-01',
+              duration_sec: 600,
+              reason_id: 'DT-CHG-01'
+            }
+      - input: ref('dim_downtime_reason')
+        rows:
+          - {reason_id: 'DT-CHG-01', oee_loss_category: 'Availability Loss'}
+    expect:
+      rows:
+        - {
+            machine_id: 'M01',
+            shift_id: 'S1',
+            date_id: '2026-01-01',
+            availability: 0.9791666666666666,
+            performance: 0.6944444444444444,
+            quality: 0.96,
+            oee: 0.6527777777777777,
+            cycle_time_confidence: 'verified'
+          }
+
+  # ============================================================
+  # Test 2: Zero Logged Downtime
+  # ============================================================
+  - name: test_oee_zero_downtime
+    description: "Availability should be 1.0 when no downtime logged"
+    model: oee_daily
+    given:
+      - input: ref('dim_machine')
+        rows:
+          - {machine_id: 'M01', machine_name: 'Test Machine'}
+      - input: ref('dim_shift')
+        rows:
+          - {shift_id: 'S1', shift_name: 'Morning', start_time: '06:00:00', end_time: '14:00:00', crosses_midnight: false}
+      - input: ref('dim_product')
+        rows:
+          - {product_id: 'P-001', standard_cycle_time_sec: 10.0, cycle_time_confidence: 'verified'}
+      - input: ref('fct_production_run')
+        rows:
+          - {
+              machine_id: 'M01',
+              shift_id: 'S1',
+              product_id: 'P-001',
+              run_date: '2026-01-01',
+              run_sequence_number: 1,
+              run_start_time: '2026-01-01 06:00:00',
+              run_end_time: '2026-01-01 08:00:00',
+              produced_units: 500,
+              good_units: 480
+            }
+      - input: ref('fct_downtime_event')
+        rows: []
+      - input: ref('dim_downtime_reason')
+        rows: []
+    expect:
+      rows:
+        - {
+            machine_id: 'M01',
+            shift_id: 'S1',
+            date_id: '2026-01-01',
+            availability: 1.0,
+            total_downtime_sec: 0
+          }
+
+  # ============================================================
+  # Test 3: Zero Run Duration
+  # ============================================================
+  - name: test_oee_zero_run_duration
+    description: "Runs with zero duration should be excluded from Performance"
+    model: oee_daily
+    given:
+      - input: ref('dim_machine')
+        rows:
+          - {machine_id: 'M01', machine_name: 'Test Machine'}
+      - input: ref('dim_shift')
+        rows:
+          - {shift_id: 'S1', shift_name: 'Morning', start_time: '06:00:00', end_time: '14:00:00', crosses_midnight: false}
+      - input: ref('dim_product')
+        rows:
+          - {product_id: 'P-001', standard_cycle_time_sec: 10.0, cycle_time_confidence: 'verified'}
+      - input: ref('fct_production_run')
+        rows:
+          - {
+              machine_id: 'M01',
+              shift_id: 'S1',
+              product_id: 'P-001',
+              run_date: '2026-01-01',
+              run_sequence_number: 1,
+              run_start_time: '2026-01-01 06:00:00',
+              run_end_time: '2026-01-01 06:00:00',
+              produced_units: 500,
+              good_units: 480
+            }
+          - {
+              machine_id: 'M01',
+              shift_id: 'S1',
+              product_id: 'P-001',
+              run_date: '2026-01-01',
+              run_sequence_number: 2,
+              run_start_time: '2026-01-01 08:00:00',
+              run_end_time: '2026-01-01 10:00:00',
+              produced_units: 400,
+              good_units: 380
+            }
+      - input: ref('fct_downtime_event')
+        rows: []
+      - input: ref('dim_downtime_reason')
+        rows: []
+    expect:
+      rows:
+        - {
+            machine_id: 'M01',
+            shift_id: 'S1',
+            date_id: '2026-01-01',
+            performance: 0.5555555555555556
+          }
+
+  # ============================================================
+  # Test 4: NULL standard_cycle_time_sec
+  # ============================================================
+  - name: test_oee_null_cycle_time
+    description: "NULL cycle time should result in NULL Performance and NULL OEE"
+    model: oee_daily
+    given:
+      - input: ref('dim_machine')
+        rows:
+          - {machine_id: 'M01', machine_name: 'Test Machine'}
+      - input: ref('dim_shift')
+        rows:
+          - {shift_id: 'S1', shift_name: 'Morning', start_time: '06:00:00', end_time: '14:00:00', crosses_midnight: false}
+      - input: ref('dim_product')
+        rows:
+          - {product_id: 'P-001', standard_cycle_time_sec: null, cycle_time_confidence: 'unconfirmed'}
+      - input: ref('fct_production_run')
+        rows:
+          - {
+              machine_id: 'M01',
+              shift_id: 'S1',
+              product_id: 'P-001',
+              run_date: '2026-01-01',
+              run_sequence_number: 1,
+              run_start_time: '2026-01-01 06:00:00',
+              run_end_time: '2026-01-01 08:00:00',
+              produced_units: 500,
+              good_units: 480
+            }
+      - input: ref('fct_downtime_event')
+        rows: []
+      - input: ref('dim_downtime_reason')
+        rows: []
+    expect:
+      rows:
+        - {
+            machine_id: 'M01',
+            shift_id: 'S1',
+            date_id: '2026-01-01',
+            performance: null,
+            oee: null
+          }
+
+  # ============================================================
+  # Test 5: unconfirmed cycle_time_confidence
+  # ============================================================
+  - name: test_oee_unconfirmed_confidence
+    description: "unconfirmed confidence should be carried through to output"
+    model: oee_daily
+    given:
+      - input: ref('dim_machine')
+        rows:
+          - {machine_id: 'M01', machine_name: 'Test Machine'}
+      - input: ref('dim_shift')
+        rows:
+          - {shift_id: 'S1', shift_name: 'Morning', start_time: '06:00:00', end_time: '14:00:00', crosses_midnight: false}
+      - input: ref('dim_product')
+        rows:
+          - {product_id: 'P-001', standard_cycle_time_sec: 10.0, cycle_time_confidence: 'unconfirmed'}
+      - input: ref('fct_production_run')
+        rows:
+          - {
+              machine_id: 'M01',
+              shift_id: 'S1',
+              product_id: 'P-001',
+              run_date: '2026-01-01',
+              run_sequence_number: 1,
+              run_start_time: '2026-01-01 06:00:00',
+              run_end_time: '2026-01-01 08:00:00',
+              produced_units: 500,
+              good_units: 480
+            }
+      - input: ref('fct_downtime_event')
+        rows: []
+      - input: ref('dim_downtime_reason')
+        rows: []
+    expect:
+      rows:
+        - {
+            machine_id: 'M01',
+            shift_id: 'S1',
+            date_id: '2026-01-01',
+            cycle_time_confidence: 'unconfirmed'
+          }
+
+  # ============================================================
+  # Test 6: Multi-Run Duration-Weighted Average
+  # ============================================================
+  - name: test_oee_multi_run_weighted
+    description: "Performance should be duration-weighted average across runs"
+    model: oee_daily
+    given:
+      - input: ref('dim_machine')
+        rows:
+          - {machine_id: 'M01', machine_name: 'Test Machine'}
+      - input: ref('dim_shift')
+        rows:
+          - {shift_id: 'S1', shift_name: 'Morning', start_time: '06:00:00', end_time: '14:00:00', crosses_midnight: false}
+      - input: ref('dim_product')
+        rows:
+          - {product_id: 'P-001', standard_cycle_time_sec: 10.0, cycle_time_confidence: 'verified'}
+      - input: ref('fct_production_run')
+        rows:
+          - {
+              machine_id: 'M01',
+              shift_id: 'S1',
+              product_id: 'P-001',
+              run_date: '2026-01-01',
+              run_sequence_number: 1,
+              run_start_time: '2026-01-01 06:00:00',
+              run_end_time: '2026-01-01 08:00:00',
+              produced_units: 600,
+              good_units: 570
+            }
+          - {
+              machine_id: 'M01',
+              shift_id: 'S1',
+              product_id: 'P-001',
+              run_date: '2026-01-01',
+              run_sequence_number: 2,
+              run_start_time: '2026-01-01 08:00:00',
+              run_end_time: '2026-01-01 09:00:00',
+              produced_units: 200,
+              good_units: 190
+            }
+      - input: ref('fct_downtime_event')
+        rows: []
+      - input: ref('dim_downtime_reason')
+        rows: []
+    expect:
+      rows:
+        - {
+            machine_id: 'M01',
+            shift_id: 'S1',
+            date_id: '2026-01-01',
+            performance: 0.7407407407407407
+          }

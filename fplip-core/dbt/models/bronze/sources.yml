@@ -1,0 +1,26 @@
+version: 2
+
+sources:
+  - name: bronze
+    schema: "{{ var('bronze_dataset', 'fplip_bronze') }}"
+    tables:
+      - name: production_runs
+        loaded_at_field: _ingested_at
+        freshness:
+          warn_after: {count: 24, period: hour}
+          error_after: {count: 48, period: hour}
+      - name: downtime_events
+        loaded_at_field: _ingested_at
+        freshness:
+          warn_after: {count: 30, period: day}
+          error_after: {count: 365, period: day}
+      - name: qc_inspections
+        loaded_at_field: _ingested_at
+        freshness:
+          warn_after: {count: 30, period: day}
+          error_after: {count: 365, period: day}
+      - name: machines
+      - name: products
+      - name: shifts
+      - name: downtime_reasons
+      - name: defect_types

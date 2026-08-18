@@ -1,0 +1,15 @@
+[lint]
+# Select rules to enforce
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+]
+
+# Ignore these rules for now
+ignore = [
+    "DTZ",  # timezone warnings (we'll fix later)
+    "EXE",  # shebang warnings
+    "BLE",  # blind exceptions
+    "PLR",  # pylint warnings
+]

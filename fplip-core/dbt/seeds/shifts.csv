@@ -1,0 +1,4 @@
+shift_id,shift_name,start_time,end_time,crosses_midnight,active_flag,_ingested_at,_source_file
+S1,Morning,06:00:00,14:00:00,false,true,2026-07-25 00:00:00,ci-seed.csv
+S2,Afternoon,14:00:00,22:00:00,false,true,2026-07-25 00:00:00,ci-seed.csv
+S3,Night,22:00:00,06:00:00,true,true,2026-07-25 00:00:00,ci-seed.csv

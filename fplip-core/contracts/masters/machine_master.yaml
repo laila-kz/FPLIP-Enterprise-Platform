@@ -1,0 +1,57 @@
+source_name: "machine_master"
+description: "Machine Master — authoritative registry of every production machine"
+owner: "Maintenance / Production Engineering"
+contact: "TBD"
+update_frequency: "adhoc"
+freshness_sla_hours: 168  # weekly SLA for master data
+confidence: "unconfirmed"
+
+schema:
+  - name: "machine_id"
+    type: "STRING"
+    nullable: false
+    description: "Unique machine identifier"
+  - name: "machine_name"
+    type: "STRING"
+    nullable: false
+    description: "Human-readable machine name"
+  - name: "machine_type"
+    type: "STRING"
+    nullable: false
+    description: "Equipment category"
+  - name: "line_id"
+    type: "STRING"
+    nullable: true
+    description: "Production line the machine belongs to"
+  - name: "location"
+    type: "STRING"
+    nullable: true
+    description: "Physical location within the factory"
+  - name: "manufacturer"
+    type: "STRING"
+    nullable: true
+    description: "Equipment manufacturer"
+  - name: "install_date"
+    type: "DATE"
+    nullable: true
+    description: "Date the machine entered service"
+  - name: "status"
+    type: "STRING"
+    nullable: false
+    description: "Current operational status"
+  - name: "nominal_capacity_units_per_hour"
+    type: "INTEGER"
+    nullable: true
+    description: "Nameplate rated capacity"
+  - name: "data_entry_method"
+    type: "STRING"
+    nullable: false
+    description: "Capture method"
+  - name: "last_updated_at"
+    type: "TIMESTAMP"
+    nullable: false
+    description: "Last modification timestamp"
+  - name: "last_updated_by"
+    type: "STRING"
+    nullable: true
+    description: "Badge/employee code of person who last edited"

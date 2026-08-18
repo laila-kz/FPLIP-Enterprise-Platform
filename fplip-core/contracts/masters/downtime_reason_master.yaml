@@ -1,0 +1,33 @@
+source_name: "downtime_reason_master"
+description: "Downtime Reason Code Master — standardized stop-reason taxonomy"
+owner: "Maintenance"
+contact: "TBD"
+update_frequency: "adhoc"
+freshness_sla_hours: 168
+confidence: "unconfirmed"
+
+schema:
+  - name: "reason_id"
+    type: "STRING"
+    nullable: false
+    description: "Unique reason code"
+  - name: "reason_name"
+    type: "STRING"
+    nullable: false
+    description: "Descriptive name"
+  - name: "reason_category"
+    type: "STRING"
+    nullable: false
+    description: "High-level grouping"
+  - name: "oee_loss_category"
+    type: "STRING"
+    nullable: false
+    description: "Which OEE component this reason affects"
+  - name: "description"
+    type: "STRING"
+    nullable: true
+    description: "Extended explanation"
+  - name: "active_flag"
+    type: "BOOLEAN"
+    nullable: false
+    description: "Whether this code is currently assignable"

@@ -1,0 +1,122 @@
+version: 2
+
+models:
+  - name: fct_production_run
+    description: "Production run fact table — one row per (machine, shift, product, date, run_sequence_number)"
+    columns:
+      - name: run_id
+        description: "Surrogate key for the production run"
+        tests:
+          - unique
+          - not_null
+      - name: machine_id
+        description: "Machine that ran the production"
+        tests:
+          - relationships:
+              to: ref('dim_machine')
+              field: machine_id
+      - name: shift_id
+        description: "Shift during which the run occurred"
+        tests:
+          - relationships:
+              to: ref('dim_shift')
+              field: shift_id
+      - name: product_id
+        description: "Product produced"
+        tests:
+          - relationships:
+              to: ref('dim_product')
+              field: product_id
+              config:
+                severity: warn
+      - name: produced_units
+        description: "Total units produced"
+        tests:
+          - not_null
+      - name: good_units
+        description: "Units meeting spec"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "<= produced_units"
+              config:
+                severity: error
+      - name: scrap_units
+        description: "Units scrapped (produced - good)"
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+
+  - name: fct_downtime_event
+    description: "Downtime event fact table — one row per machine stop event"
+    columns:
+      - name: event_id
+        description: "Surrogate key for the downtime event"
+        tests:
+          - unique
+          - not_null
+      - name: machine_id
+        description: "Machine that stopped"
+        tests:
+          - relationships:
+              to: ref('dim_machine')
+              field: machine_id
+      - name: shift_id
+        description: "Shift during which the stop occurred"
+        tests:
+          - relationships:
+              to: ref('dim_shift')
+              field: shift_id
+      - name: reason_id
+        description: "Standardized reason (nullable by design — unmapped reasons are valid)"
+        tests:
+          - relationships:
+              to: ref('dim_downtime_reason')
+              field: reason_id
+              config:
+                severity: warn
+      - name: duration_sec
+        description: "Stop duration in seconds"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+
+  - name: fct_qc_inspection
+    description: "QC inspection fact table — one row per inspection batch"
+    columns:
+      - name: inspection_id
+        description: "Surrogate key for the inspection"
+        tests:
+          - unique
+          - not_null
+      - name: production_run_reference
+        description: "Reference to production run (nullable by design — inspections may not always tie to a run)"
+        tests:
+          - relationships:
+              to: ref('fct_production_run')
+              field: run_id
+              config:
+                severity: warn
+      - name: defect_type_id
+        description: "Defect found (nullable by design — passed inspections have no defect)"
+        tests:
+          - relationships:
+              to: ref('dim_defect_type')
+              field: defect_type_id
+              config:
+                severity: warn
+      - name: units_inspected
+        description: "Units inspected in the batch"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: units_rejected
+        description: "Units failing inspection"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "<= units_inspected"
+      - name: rejection_rate
+        description: "Rejection rate (units_rejected / units_inspected)"

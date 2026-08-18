@@ -1,0 +1,57 @@
+source_name: "downtime"
+description: "Downtime Event Log — transactional record of every machine stop"
+owner: "Production / Maintenance"
+contact: "TBD"
+update_frequency: "daily"
+freshness_sla_hours: 24
+confidence: "unconfirmed"
+
+schema:
+  - name: "event_id"
+    type: "STRING"
+    nullable: false
+    description: "Surrogate identifier assigned at load time"
+  - name: "machine_id"
+    type: "STRING"
+    nullable: false
+    description: "Machine that stopped"
+  - name: "shift_id"
+    type: "STRING"
+    nullable: false
+    description: "Shift during which the stop occurred"
+  - name: "event_date"
+    type: "DATE"
+    nullable: false
+    description: "Calendar date of the event"
+  - name: "reason_id"
+    type: "STRING"
+    nullable: true
+    description: "Standardized reason, once mapped"
+  - name: "reason_free_text"
+    type: "STRING"
+    nullable: true
+    description: "Raw text as originally logged"
+  - name: "start_time"
+    type: "TIMESTAMP"
+    nullable: false
+    description: "Stop start time"
+  - name: "end_time"
+    type: "TIMESTAMP"
+    nullable: true
+    description: "Stop end time (null if still ongoing)"
+  - name: "duration_sec"
+    type: "INTEGER"
+    nullable: false
+    description: "Stop duration in seconds"
+  - name: "data_entry_method"
+    type: "STRING"
+    nullable: false
+    description: "Capture method: Manual, ERP Export"
+  - name: "entered_by"
+    type: "STRING"
+    nullable: false
+    description: "Badge code of transcriber"
+  - name: "entered_at"
+    type: "TIMESTAMP"
+    nullable: false
+    description: "Entry timestamp"

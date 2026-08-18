@@ -1,0 +1,8 @@
+[
+  "planned_units",
+  "machine_avg_oee_14d",
+  "machine_scrap_rate_14d",
+  "product_avg_scrap_rate",
+  "shift_avg_scrap_rate",
+  "is_night_shift"
+]

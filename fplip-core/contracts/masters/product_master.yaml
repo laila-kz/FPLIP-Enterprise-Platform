@@ -1,0 +1,57 @@
+source_name: "product_master"
+description: "Product Master — authoritative SKU/recipe catalog"
+owner: "Production Engineering / Planning"
+contact: "TBD"
+update_frequency: "adhoc"
+freshness_sla_hours: 168
+confidence: "unconfirmed"
+
+schema:
+  - name: "product_id"
+    type: "STRING"
+    nullable: false
+    description: "Unique product identifier"
+  - name: "product_name"
+    type: "STRING"
+    nullable: false
+    description: "Descriptive product name"
+  - name: "product_family"
+    type: "STRING"
+    nullable: false
+    description: "High-level product grouping"
+  - name: "unit_of_measure"
+    type: "STRING"
+    nullable: false
+    description: "Unit the product is counted in"
+  - name: "standard_cycle_time_sec"
+    type: "DECIMAL"
+    nullable: false
+    description: "Expected time to produce one unit"
+  - name: "cycle_time_source"
+    type: "STRING"
+    nullable: false
+    description: "Where the cycle time figure came from"
+  - name: "cycle_time_confidence"
+    type: "STRING"
+    nullable: false
+    description: "Confidence tag: verified, estimated, unconfirmed"
+  - name: "standard_weight_kg"
+    type: "DECIMAL"
+    nullable: true
+    description: "Nominal unit weight"
+  - name: "active_flag"
+    type: "BOOLEAN"
+    nullable: false
+    description: "Whether the product is currently in production"
+  - name: "data_entry_method"
+    type: "STRING"
+    nullable: false
+    description: "Capture method"
+  - name: "created_at"
+    type: "TIMESTAMP"
+    nullable: false
+    description: "Record creation time"
+  - name: "last_updated_at"
+    type: "TIMESTAMP"
+    nullable: false
+    description: "Last modification time"

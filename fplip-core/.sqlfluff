@@ -1,0 +1,16 @@
+[sqlfluff]
+dialect = bigquery
+templater = dbt
+exclude_rules = LT01, LT02, LT03, LT04, LT05, LT06, LT07, LT08, LT09, LT10, LT11, LT12, LT13, LT14, LT15, AL01, AL02, AM05, RF02, ST01, ST02, ST06, RF04
+
+[sqlfluff:templater:dbt]
+project_dir = dbt
+profiles_dir = ~/.dbt
+profile = fplip
+target = ci_lint
+
+[sqlfluff:rules:aliasing.table]
+aliasing = gimplicit
+
+[sqlfluff:rules:aliasing.column]
+aliasing = implicit

@@ -1,0 +1,33 @@
+source_name: "defect_type_master"
+description: "Defect Type Master — standardized defect classification"
+owner: "Quality Department"
+contact: "TBD"
+update_frequency: "adhoc"
+freshness_sla_hours: 168
+confidence: "unconfirmed"
+
+schema:
+  - name: "defect_type_id"
+    type: "STRING"
+    nullable: false
+    description: "Unique defect code"
+  - name: "defect_name"
+    type: "STRING"
+    nullable: false
+    description: "Descriptive name"
+  - name: "defect_category"
+    type: "STRING"
+    nullable: false
+    description: "High-level grouping"
+  - name: "severity"
+    type: "STRING"
+    nullable: false
+    description: "Defect severity: Minor, Major, Critical"
+  - name: "description"
+    type: "STRING"
+    nullable: true
+    description: "Extended explanation"
+  - name: "active_flag"
+    type: "BOOLEAN"
+    nullable: false
+    description: "Whether currently assignable"

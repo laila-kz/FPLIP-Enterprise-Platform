@@ -1,0 +1,20 @@
+select
+  log_reference_number,
+  machine_id,
+  shift_id,
+  product_id,
+  run_date,
+  run_sequence_number,
+  run_start_time,
+  run_end_time,
+  planned_units,
+  produced_units,
+  good_units,
+  operator_id,
+  notes,
+  data_entry_method,
+  entered_by,
+  entered_at,
+  _ingested_at,
+  _source_file
+from {{ ref('production_runs') }}
