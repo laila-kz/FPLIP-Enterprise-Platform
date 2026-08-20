@@ -65,6 +65,7 @@ def qc_inspections_schema():
     """
     return [
         bigquery.SchemaField("inspection_id", "STRING", mode="REQUIRED"),
+        bigquery.SchemaField("machine_id", "STRING", mode="NULLABLE"),
         bigquery.SchemaField("production_run_reference", "STRING", mode="NULLABLE"),
         bigquery.SchemaField("inspection_date", "DATE", mode="REQUIRED"),
         bigquery.SchemaField("defect_type_id", "STRING", mode="NULLABLE"),

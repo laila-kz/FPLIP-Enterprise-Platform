@@ -13,4 +13,4 @@ select
   last_updated_at,
   _ingested_at,
   _source_file
-from {{ ref('products') }}
+from {{ source('bronze', 'products') }}

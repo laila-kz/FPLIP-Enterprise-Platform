@@ -1,0 +1,107 @@
+name: Production Schedule — Daily Pipeline
+
+on:
+  schedule:
+    - cron: '5 5 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Set up Airflow environment (with dbt installed)
+        run: |
+          python -m venv .venv-airflow
+          source .venv-airflow/bin/activate
+          pip install --upgrade pip
+          pip install "apache-airflow==2.9.3" "apache-airflow-providers-google" dbt-core dbt-bigquery \
+            --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.9.3/constraints-3.10.txt"
+
+      - name: Set up GCP credentials (Production)
+        run: |
+          echo '${{ secrets.INGESTION_SA_KEY_PROD }}' > ${{ runner.temp }}/gcp-key.json
+          echo "GOOGLE_APPLICATION_CREDENTIALS=${{ runner.temp }}/gcp-key.json" >> $GITHUB_ENV
+
+      - name: Configure dbt profile
+        run: |
+          mkdir -p $HOME/.dbt
+          cat > $HOME/.dbt/profiles.yml << 'EOF'
+          fplip:
+            target: prod
+            outputs:
+              prod:
+                type: bigquery
+                method: service-account
+                project: flip-demo
+                dataset: fplip_bronze
+                keyfile: ${{ runner.temp }}/gcp-key.json
+                location: US
+                threads: 1
+          EOF
+          echo "DBT_PROFILES_DIR=$HOME/.dbt" >> $GITHUB_ENV
+
+      - name: Create Airflow home directory
+        run: |
+          mkdir -p ${{ github.workspace }}/airflow_home/dags
+          echo "AIRFLOW_HOME=${{ github.workspace }}/airflow_home" >> $GITHUB_ENV
+          cp -r dags/* ${{ github.workspace }}/airflow_home/dags/
+
+      - name: Initialize Airflow DB
+        run: |
+          source .venv-airflow/bin/activate
+          airflow db migrate
+
+      - name: Install dbt package dependencies
+        run: |
+          source .venv-airflow/bin/activate
+          cd ${{ github.workspace }}/dbt
+          dbt deps --profiles-dir "$HOME/.dbt"
+
+      - name: Prepare synthetic input data
+        run: |
+          DSF=$(date -u +%Y%m%d)""
+          IN=${{ github.workspace }}/data/incoming
+          mkdir -p "$IN"
+
+          printf '%s\n' \
+            "event_id,machine_id,shift_id,event_date,reason_id,reason_free_text,start_time,end_time,duration_sec,data_entry_method,entered_by,entered_at" \
+            "evt-1,M01,S1,${DSF},RSN-MAINT,Maintenance performed,${DSF}T01:00:00Z,${DSF}T01:02:00Z,120,Manual,op-1,${DSF}T01:05:00Z" \
+            > "$IN/downtime_${DSF}.csv"
+
+          printf '%s\n' \
+            "log_reference_number,machine_id,shift_id,product_id,run_date,run_sequence_number,run_start_time,run_end_time,planned_units,produced_units,good_units,operator_id,notes,data_entry_method,entered_by,entered_at" \
+            "LRN-1,M01,S1,P-BLOCK-01,${DSF},1,${DSF}T01:00:00Z,${DSF}T02:00:00Z,120,100,98,op-1,normal run,Manual,op-1,${DSF}T02:05:00Z" \
+            > "$IN/production_${DSF}.csv"
+
+          printf '%s\n' \
+            "log_reference_number,machine_id,shift_id,product_id,run_date,run_sequence_number,run_start_time,run_end_time,planned_units,produced_units,good_units,operator_id,notes,data_entry_method,entered_by,entered_at" \
+            "LRN-2,M02,S2,P-BLOCK-02,${DSF},1,${DSF}T03:00:00Z,${DSF}T04:00:00Z,60,50,50,op-2,multi run test,Manual,op-2,${DSF}T04:05:00Z" \
+            > "$IN/production_runs_multi_run_test.csv"
+
+          printf '%s\n' \
+            "inspection_id,production_run_reference,inspection_date,defect_type_id,units_inspected,units_rejected,inspector_id,data_entry_method,entered_by,entered_at" \
+            "I001,LRN-1,${DSF},DT-NA,100,2,ins-1,Manual,ins-1,${DSF}T02:15:00Z" \
+            > "$IN/qc_${DSF}.csv"
+
+      - name: Run pipeline
+        env:
+          AIRFLOW_HOME: ${{ github.workspace }}/airflow_home
+          AIRFLOW__CORE__LOAD_EXAMPLES: false
+          DBT_PROFILES_DIR: $HOME/.dbt
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          source .venv-airflow/bin/activate
+          chmod +x scripts/run_pipeline_ci.sh
+          ./scripts/run_pipeline_ci.sh $(date -u +%Y-%m-%d)
+
+      - name: Notify Slack on failure
+        if: failure()
+        run: |
+          curl -X POST -H 'Content-Type: application/json' \
+            -d '{"text": "❌ FPLIP production-schedule workflow failed for '"$(date -u +%Y-%m-%d)"'. Check the Actions log for details."}' \
+            "${{ secrets.SLACK_WEBHOOK_URL }}"

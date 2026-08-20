@@ -1,5 +1,5 @@
-inspection_id,production_run_reference,inspection_date,defect_type_id,units_inspected,units_rejected,inspector_id,data_entry_method,entered_by,entered_at,_ingested_at,_source_file
-QC-CI-001,LOG-CI-001,2026-07-25,,50,0,EMP-0001,Manual,EMP-0001,2026-07-25 08:30:00,2026-07-25 00:00:00,ci-seed.csv
-QC-CI-002,LOG-CI-001,2026-07-25,DEF-DIM-01,50,5,EMP-0001,Manual,EMP-0001,2026-07-25 08:35:00,2026-07-25 00:00:00,ci-seed.csv
-QC-CI-003,LOG-CI-003,2026-07-25,DEF-VIS-01,40,8,EMP-0003,Manual,EMP-0003,2026-07-25 09:00:00,2026-07-25 00:00:00,ci-seed.csv
-QC-CI-004,,2026-07-25,DEF-STRUCT-01,30,12,EMP-0005,Manual,EMP-0005,2026-07-25 10:00:00,2026-07-25 00:00:00,ci-seed.csv
+inspection_id,machine_id,production_run_reference,inspection_date,defect_type_id,units_inspected,units_rejected,inspector_id,data_entry_method,entered_by,entered_at,_ingested_at,_source_file
+QC-CI-001,M01,LOG-CI-001,2026-07-25,,50,0,EMP-0001,Manual,EMP-0001,2026-07-25 08:30:00,2026-07-25 00:00:00,ci-seed.csv
+QC-CI-002,M01,LOG-CI-001,2026-07-25,DEF-DIM-01,50,5,EMP-0001,Manual,EMP-0001,2026-07-25 08:35:00,2026-07-25 00:00:00,ci-seed.csv
+QC-CI-003,M02,LOG-CI-003,2026-07-25,DEF-VIS-01,40,8,EMP-0003,Manual,EMP-0003,2026-07-25 09:00:00,2026-07-25 00:00:00,ci-seed.csv
+QC-CI-004,M02,,2026-07-25,DEF-STRUCT-01,30,12,EMP-0005,Manual,EMP-0005,2026-07-25 10:00:00,2026-07-25 00:00:00,ci-seed.csv

@@ -1,5 +1,6 @@
 select
   inspection_id,
+  machine_id,
   production_run_reference,
   inspection_date,
   defect_type_id,
@@ -9,4 +10,4 @@ select
   data_entry_method,
   entered_by,
   entered_at
-from {{ ref('qc_inspections') }}
+from {{ source('bronze', 'qc_inspections') }}

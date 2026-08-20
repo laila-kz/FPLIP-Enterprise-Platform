@@ -13,4 +13,4 @@ select
   last_updated_by,
   _ingested_at,
   _source_file
-from {{ ref('machines') }}
+from {{ source('bronze', 'machines') }}

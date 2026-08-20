@@ -17,4 +17,4 @@ select
   entered_at,
   _ingested_at,
   _source_file
-from {{ ref('production_runs') }}
+from {{ source('bronze', 'production_runs') }}

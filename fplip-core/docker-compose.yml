@@ -27,6 +27,7 @@ services:
       AIRFLOW__WEBSERVER__SECRET_KEY: "this-is-a-fixed-secret-key-for-local-dev"  # <-- ADD THIS
       PYTHONPATH: /opt/airflow  # <-- ADD THIS IF NOT ALREADY THERE
     volumes:
+      - ./common:/opt/airflow/common
       - ./dags:/opt/airflow/dags
       - ./ingestion:/opt/airflow/ingestion
       - ./contracts:/opt/airflow/contracts
@@ -49,6 +50,7 @@ services:
       AIRFLOW__WEBSERVER__SECRET_KEY: "this-is-a-fixed-secret-key-for-local-dev"  # <-- ADD THIS
       PYTHONPATH: /opt/airflow  # <-- ADD THIS
     volumes:
+      - ./common:/opt/airflow/common
       - ./dags:/opt/airflow/dags
       - ./ingestion:/opt/airflow/ingestion
       - ./contracts:/opt/airflow/contracts
@@ -58,7 +60,7 @@ services:
       - ./dbt/.dbt:/home/airflow/.dbt:ro
       - airflow-venv:/opt/airflow/.venv-fplip
     ports:
-      - "8080:8080"
+      - "8082:8080"
     command: webserver
 
   airflow-scheduler:
@@ -73,6 +75,7 @@ services:
       AIRFLOW__WEBSERVER__SECRET_KEY: "this-is-a-fixed-secret-key-for-local-dev"  # <-- ADD THIS
       PYTHONPATH: /opt/airflow  # <-- ADD THIS
     volumes:
+      - ./common:/opt/airflow/common
       - ./dags:/opt/airflow/dags
       - ./ingestion:/opt/airflow/ingestion
       - ./contracts:/opt/airflow/contracts

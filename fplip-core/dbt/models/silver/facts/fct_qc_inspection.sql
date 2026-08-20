@@ -8,6 +8,7 @@ select
   {{ dbt_utils.generate_surrogate_key([
     'inspection_id'
   ]) }} as inspection_id,
+  machine_id,
   production_run_reference,
   inspection_date,
   defect_type_id,

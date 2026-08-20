@@ -14,8 +14,10 @@ models:
   fplip:
     bronze:
       +materialized: view
+      +schema: bronze
     silver:
       +materialized: table
+      +schema: silver
     gold:
       +materialized: table
       +schema: gold
@@ -23,7 +25,6 @@ models:
 
 seeds:
   fplip:
-    +schema: "{{ var('bronze_dataset', 'fplip_bronze') }}"
     +quote_columns: true
     production_runs:
       +column_types:

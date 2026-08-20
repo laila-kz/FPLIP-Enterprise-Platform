@@ -48,6 +48,7 @@ PARTITION BY DATE(_ingested_at)
 CLUSTER BY machine_id, event_date;''',
     f'''CREATE OR REPLACE TABLE `{PROJECT}.fplip_bronze.qc_inspections` (
   inspection_id STRING NOT NULL,
+  machine_id STRING,
   production_run_reference STRING,
   inspection_date DATE NOT NULL,
   defect_type_id STRING,

@@ -11,6 +11,10 @@ schema:
     type: "STRING"
     nullable: false
     description: "Surrogate identifier"
+  - name: "machine_id"
+    type: "STRING"
+    nullable: true
+    description: "Machine identifier"
   - name: "production_run_reference"
     type: "STRING"
     nullable: true

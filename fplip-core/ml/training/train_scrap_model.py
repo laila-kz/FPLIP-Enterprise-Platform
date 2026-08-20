@@ -16,6 +16,7 @@ Outputs:
 
 import os
 import json
+import sys
 import joblib
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -24,12 +25,17 @@ import pandas as pd
 import numpy as np
 from google.cloud import bigquery
 from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.pipeline import Pipeline
 
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 # Constants
-PROJECT_ID = os.getenv("GCP_PROJECT_ID", "flip-dev-503300")
+PROJECT_ID = "fplip-demo"
 DATASET = "fplip_silver"
 MODEL_DIR = Path("ml/models")
 MODEL_DIR.mkdir(parents=True, exist_ok=True)
@@ -52,6 +58,10 @@ FEATURES = {
 
 def get_bigquery_client():
     """Get BigQuery client using default credentials."""
+    if not PROJECT_ID:
+        print("[Info] GCP project ID is not configured. Using synthetic data...")
+        return None
+
     try:
         return bigquery.Client(project=PROJECT_ID)
     except Exception as e:
@@ -66,6 +76,7 @@ def get_training_data(client):
         return None
 
     query = """
+WITH run_features AS (
     SELECT
         pr.machine_id,
         pr.shift_id,
@@ -78,28 +89,64 @@ def get_training_data(client):
         pr.run_start_time,
         pr.run_end_time,
         pr.produced_units - pr.good_units AS scrap_units,
-        (pr.produced_units - pr.good_units) / NULLIF(pr.produced_units, 0) AS scrap_rate,
+        SAFE_DIVIDE(pr.produced_units - pr.good_units, pr.produced_units) AS scrap_rate,
         
-        -- Product historical scrap rate
-        0.05 AS product_avg_scrap_rate,
-
-        -- Shift historical scrap rate
-        0.045 AS shift_avg_scrap_rate,
-
-        -- Machine average OEE (14 days)
-        0.75 AS machine_avg_oee_14d,
-
-        -- Machine scrap rate (14 days)
-        0.05 AS machine_scrap_rate_14d,
+        -- Fallback to aggregate AVG if historical window is empty (e.g. single-day test runs)
+        COALESCE(
+            AVG(oee.oee) OVER (
+                PARTITION BY pr.machine_id 
+                ORDER BY pr.run_date 
+                ROWS BETWEEN 14 PRECEDING AND 1 PRECEDING
+            ),
+            AVG(oee.oee) OVER (PARTITION BY pr.machine_id),
+            0.75
+        ) AS machine_avg_oee_14d,
+        
+        COALESCE(
+            AVG(SAFE_DIVIDE(pr.produced_units - pr.good_units, pr.produced_units)) OVER (
+                PARTITION BY pr.machine_id 
+                ORDER BY pr.run_date 
+                ROWS BETWEEN 14 PRECEDING AND 1 PRECEDING
+            ),
+            SAFE_DIVIDE(pr.produced_units - pr.good_units, pr.produced_units),
+            0.05
+        ) AS machine_scrap_rate_14d,
+        
+        COALESCE(
+            AVG(SAFE_DIVIDE(pr.produced_units - pr.good_units, pr.produced_units)) OVER (
+                PARTITION BY pr.product_id 
+                ORDER BY pr.run_date 
+                ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
+            ),
+            AVG(SAFE_DIVIDE(pr.produced_units - pr.good_units, pr.produced_units)) OVER (PARTITION BY pr.product_id),
+            0.04
+        ) AS product_avg_scrap_rate,
+        
+        COALESCE(
+            AVG(SAFE_DIVIDE(pr.produced_units - pr.good_units, pr.produced_units)) OVER (
+                PARTITION BY pr.shift_id 
+                ORDER BY pr.run_date 
+                ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
+            ),
+            AVG(SAFE_DIVIDE(pr.produced_units - pr.good_units, pr.produced_units)) OVER (PARTITION BY pr.shift_id),
+            0.045
+        ) AS shift_avg_scrap_rate,
 
         -- Is night shift
         CASE WHEN pr.shift_id = 'S3' THEN 1 ELSE 0 END AS is_night_shift
 
-    FROM `{{project_id}}.{{dataset}}.fct_production_run` pr
-    WHERE pr.run_start_time IS NOT NULL
-      AND pr.run_end_time IS NOT NULL
-    LIMIT 100
-    """
+    FROM `{{project_id}}.fplip_silver.fct_production_run` pr
+    
+    -- Join for OEE data from gold layer
+    LEFT JOIN `{{project_id}}.fplip_gold.oee_daily` oee
+        ON oee.machine_id = pr.machine_id
+        AND oee.date_id <= pr.run_date
+)
+
+SELECT * FROM run_features
+WHERE run_start_time IS NOT NULL
+  AND run_end_time IS NOT NULL
+"""
 
     query = query.replace("{{project_id}}", PROJECT_ID).replace("{{dataset}}", DATASET)
 
@@ -148,9 +195,21 @@ def train_model(X, y, feature_cols):
     """Train logistic regression model."""
     print("[Info] Training model...")
 
-    split_idx = int(len(X) * 0.8)
-    X_train, X_test = X[:split_idx], X[split_idx:]
-    y_train, y_test = y[:split_idx], y[split_idx:]
+    class_counts = np.bincount(y.astype(int), minlength=2)
+    if class_counts.min() < 2:
+        raise ValueError(
+            "Training requires at least two examples in each class for a "
+            "stratified test split. "
+            f"Found Normal={class_counts[0]}, Excessive Scrap={class_counts[1]}."
+        )
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X,
+        y,
+        test_size=0.2,
+        random_state=42,
+        stratify=y,
+    )
 
     pipeline = Pipeline([
         ('scaler', StandardScaler()),
@@ -163,10 +222,16 @@ def train_model(X, y, feature_cols):
     y_prob = pipeline.predict_proba(X_test)[:, 1]
 
     print("\nClassification Report (Test Set):")
-    print(classification_report(y_test, y_pred, target_names=['Normal', 'Excessive Scrap']))
+    print(classification_report(
+        y_test,
+        y_pred,
+        labels=[0, 1],
+        target_names=['Normal', 'Excessive Scrap'],
+        zero_division=0,
+    ))
 
     print("\nConfusion Matrix:")
-    print(confusion_matrix(y_test, y_pred))
+    print(confusion_matrix(y_test, y_pred, labels=[0, 1]))
 
     pos_probs = y_prob[y_test == 1]
     risk_threshold = np.percentile(pos_probs, 25) if len(pos_probs) > 0 else 0.5

@@ -6,21 +6,133 @@ sources:
     tables:
       - name: production_runs
         loaded_at_field: _ingested_at
+        columns:
+          - name: log_reference_number
+          - name: machine_id
+          - name: shift_id
+          - name: product_id
+          - name: run_date
+          - name: run_sequence_number
+          - name: run_start_time
+          - name: run_end_time
+          - name: planned_units
+          - name: produced_units
+          - name: good_units
+          - name: operator_id
+          - name: notes
+          - name: data_entry_method
+          - name: entered_by
+          - name: entered_at
+          - name: _ingested_at
+          - name: _source_file
         freshness:
           warn_after: {count: 24, period: hour}
           error_after: {count: 48, period: hour}
+
       - name: downtime_events
         loaded_at_field: _ingested_at
+        columns:
+          - name: event_id
+          - name: machine_id
+          - name: shift_id
+          - name: event_date
+          - name: reason_id
+          - name: reason_free_text
+          - name: start_time
+          - name: end_time
+          - name: duration_sec
+          - name: data_entry_method
+          - name: entered_by
+          - name: entered_at
+          - name: _ingested_at
+          - name: _source_file
         freshness:
           warn_after: {count: 30, period: day}
           error_after: {count: 365, period: day}
+
       - name: qc_inspections
         loaded_at_field: _ingested_at
+        columns:
+          - name: inspection_id
+          - name: machine_id
+          - name: production_run_reference
+          - name: inspection_date
+          - name: defect_type_id
+          - name: units_inspected
+          - name: units_rejected
+          - name: inspector_id
+          - name: data_entry_method
+          - name: entered_by
+          - name: entered_at
+          - name: _ingested_at
+          - name: _source_file
         freshness:
           warn_after: {count: 30, period: day}
           error_after: {count: 365, period: day}
+
       - name: machines
+        columns:
+          - name: machine_id
+          - name: machine_name
+          - name: machine_type
+          - name: line_id
+          - name: location
+          - name: manufacturer
+          - name: install_date
+          - name: status
+          - name: nominal_capacity_units_per_hour
+          - name: data_entry_method
+          - name: last_updated_at
+          - name: last_updated_by
+          - name: _ingested_at
+          - name: _source_file
+
       - name: products
+        columns:
+          - name: product_id
+          - name: product_name
+          - name: product_family
+          - name: unit_of_measure
+          - name: standard_cycle_time_sec
+          - name: cycle_time_source
+          - name: cycle_time_confidence
+          - name: standard_weight_kg
+          - name: active_flag
+          - name: data_entry_method
+          - name: created_at
+          - name: last_updated_at
+          - name: _ingested_at
+          - name: _source_file
+
       - name: shifts
+        columns:
+          - name: shift_id
+          - name: shift_name
+          - name: start_time
+          - name: end_time
+          - name: crosses_midnight
+          - name: active_flag
+          - name: _ingested_at
+          - name: _source_file
+
       - name: downtime_reasons
+        columns:
+          - name: reason_id
+          - name: reason_name
+          - name: reason_category
+          - name: oee_loss_category
+          - name: description
+          - name: active_flag
+          - name: _ingested_at
+          - name: _source_file
+
       - name: defect_types
+        columns:
+          - name: defect_type_id
+          - name: defect_name
+          - name: defect_category
+          - name: severity
+          - name: description
+          - name: active_flag
+          - name: _ingested_at
+          - name: _source_file

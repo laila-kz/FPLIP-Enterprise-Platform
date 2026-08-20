@@ -7,4 +7,4 @@ select
   active_flag,
   _ingested_at,
   _source_file
-from {{ ref('downtime_reasons') }}
+from {{ source('bronze', 'downtime_reasons') }}

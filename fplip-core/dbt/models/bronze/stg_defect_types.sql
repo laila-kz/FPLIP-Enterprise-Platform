@@ -7,4 +7,4 @@ select
   active_flag,
   _ingested_at,
   _source_file
-from {{ ref('defect_types') }}
+from {{ source('bronze', 'defect_types') }}

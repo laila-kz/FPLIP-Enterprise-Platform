@@ -13,33 +13,23 @@ dbt_run_silver >> [dbt_run_gold_oee, dbt_run_gold_scrap]
 from airflow import DAG
 from airflow.operators.bash import BashOperator
 from datetime import datetime, timedelta
-from pathlib import Path
 import os
-import shutil
 
-def resolve_repo_root() -> Path:
-    if os.environ.get("GITHUB_WORKSPACE"):
-        return Path(os.environ["GITHUB_WORKSPACE"]).resolve()
+# ============================================================
+# FIX: Use the correct dbt path (found via docker exec)
+# ============================================================
+# The dbt executable is at /opt/airflow/.venv-fplip/bin/dbt inside the container
+DBT_CMD = "/opt/airflow/.venv-fplip/bin/dbt"
 
-    path = Path(__file__).resolve()
-    if path.parent.name == "dags" and path.parent.parent.name == "airflow_home":
-        return path.parent.parent.parent
-    if path.parent.name == "dags":
-        return path.parent.parent
-    return path.parent
-
-REPO_ROOT = resolve_repo_root()
-DBT_CMD = shutil.which("dbt") or str(REPO_ROOT / ".venv-airflow" / "bin" / "dbt")
-DBT_PROFILES_DIR = os.environ.get("DBT_PROFILES_DIR", str(Path.home() / ".dbt"))
-CI_MODE = os.environ.get("CI", "false").lower() in ("1", "true") or os.environ.get("GITHUB_ACTIONS") is not None
-
+# ============================================================
 # Default arguments for all tasks
+# ============================================================
 default_args = {
     "owner": "fplip",
-    "retries": 0 if CI_MODE else 3,
-    "retry_delay": timedelta(seconds=5) if CI_MODE else timedelta(minutes=2),
+    "retries": 3,
+    "retry_delay": timedelta(minutes=2),
     "retry_exponential_backoff": True,
-    "max_retry_delay": timedelta(seconds=10) if CI_MODE else timedelta(minutes=10),
+    "max_retry_delay": timedelta(minutes=10),
     "execution_timeout": timedelta(minutes=15),
 }
 
@@ -54,17 +44,13 @@ with DAG(
 ) as dag:
 
     # ============================================================
-    # dbt run helper
-    # ============================================================
-
     # Task 1: dbt Run Silver
     # ============================================================
     dbt_run_silver = BashOperator(
         task_id="dbt_run_silver",
         bash_command=(
-            f"cd {REPO_ROOT}/dbt && "
-            f"{DBT_CMD} deps --profiles-dir \"{DBT_PROFILES_DIR}\" && "
-            f"{DBT_CMD} run --profiles-dir \"{DBT_PROFILES_DIR}\" --select +silver"
+            f"cd /opt/airflow/dbt && "
+            f"{DBT_CMD} run --select silver"
         ),
         execution_timeout=timedelta(minutes=15),
     )
@@ -75,9 +61,8 @@ with DAG(
     dbt_run_gold_oee = BashOperator(
         task_id="dbt_run_gold_oee",
         bash_command=(
-            f"cd {REPO_ROOT}/dbt && "
-            f"{DBT_CMD} deps --profiles-dir \"{DBT_PROFILES_DIR}\" && "
-            f"{DBT_CMD} run --profiles-dir \"{DBT_PROFILES_DIR}\" --select oee_daily"
+            f"cd /opt/airflow/dbt && "
+            f"{DBT_CMD} run --select oee_daily"
         ),
         execution_timeout=timedelta(minutes=10),
     )
@@ -88,9 +73,8 @@ with DAG(
     dbt_run_gold_scrap = BashOperator(
         task_id="dbt_run_gold_scrap",
         bash_command=(
-            f"cd {REPO_ROOT}/dbt && "
-            f"{DBT_CMD} deps --profiles-dir \"{DBT_PROFILES_DIR}\" && "
-            f"{DBT_CMD} run --profiles-dir \"{DBT_PROFILES_DIR}\" --select scrap_root_cause_summary"
+            f"cd /opt/airflow/dbt && "
+            f"{DBT_CMD} run --select scrap_root_cause_summary"
         ),
         execution_timeout=timedelta(minutes=10),
     )

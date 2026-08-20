@@ -4,10 +4,10 @@ fplip:
     dev:
       type: bigquery
       method: oauth
-      project: "{{ env_var('GCP_PROJECT_ID') }}"
-      dataset: "{{ env_var('DBT_BIGQUERY_DATASET', 'fplip') }}"
-      threads: 1
+      project: fplip-demo
+      dataset: fplip_silver
       location: US
+      threads: 1
       priority: interactive
       timeout_seconds: 300
       retries: 1

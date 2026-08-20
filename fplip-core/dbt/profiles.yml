@@ -3,12 +3,11 @@ fplip:
   outputs:
     dev:
       type: bigquery
-      method: service-account
-      project: flip-dev-503300
+      method: oauth
+      project: fplip-demo
       dataset: fplip_silver
-      keyfile: /opt/airflow/secrets/ingestion-sa-key.json
       location: US
       threads: 1
-      timeout_seconds: 300
       priority: interactive
+      timeout_seconds: 300
       retries: 1

@@ -1,0 +1,171 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install linting tools
+        run: pip install ruff sqlfluff sqlfluff-templater-dbt dbt-bigquery
+
+      - name: Ruff linting
+        run: ruff check .
+
+      - name: Create dbt profile for SQLFluff
+        run: |
+          mkdir -p $HOME/.dbt
+          cat > $HOME/.dbt/profiles.yml << EOF
+          fplip:
+            target: ci_lint
+            outputs:
+              ci_lint:
+                type: bigquery
+                method: service-account-json
+                project: fplip-ci
+                dataset: fplip_silver
+                keyfile_json: ${{ secrets.GCP_CI_SA_KEY }}
+                location: US
+                threads: 1
+          EOF
+
+      - name: Compile dbt project
+        working-directory: dbt
+        run: |
+          dbt deps --profiles-dir $HOME/.dbt
+          dbt compile --profiles-dir $HOME/.dbt
+
+      - name: SQLFluff linting
+        working-directory: dbt
+        env:
+          DBT_PROFILES_DIR: $HOME/.dbt
+        run: sqlfluff lint models --dialect bigquery --templater dbt --exclude-rules LT02,LT12,LT09,LT05,AL01,AL02,AM05,RF02,ST06,ST02,RF04,CP01,CV01,LT01,ST01
+
+  contract-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run contract validator tests
+        run: pytest tests/unit/test_contract_validator.py -v
+
+  dbt-test:
+    runs-on: ubuntu-latest
+    env:
+      CI_PROJECT_ID: fplip-ci
+      CI_DATASET: fplip_ci_pr_${{ github.event.number }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Write CI service account key
+        run: echo '${{ secrets.GCP_CI_SA_KEY }}' > ${{ github.workspace }}/ci-sa-key.json
+
+      - name: Install dependencies
+        run: pip install dbt-core dbt-bigquery google-cloud-bigquery
+
+      - name: Create ephemeral CI dataset
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/ci-sa-key.json
+        run: |
+          python -c "
+          from google.cloud import bigquery
+          client = bigquery.Client(project='${{ env.CI_PROJECT_ID }}')
+          client.create_dataset('${{ env.CI_DATASET }}', exists_ok=True)
+          print('Created ephemeral dataset: ${{ env.CI_DATASET }}')
+          "
+
+      - name: Configure dbt profile
+        run: |
+          mkdir -p $HOME/.dbt
+          cat > $HOME/.dbt/profiles.yml << EOF
+          fplip:
+            target: ci
+            outputs:
+              ci:
+                type: bigquery
+                method: service-account
+                project: ${{ env.CI_PROJECT_ID }}
+                dataset: ${{ env.CI_DATASET }}
+                keyfile: ${{ github.workspace }}/ci-sa-key.json
+                location: US
+                threads: 4
+          EOF
+
+      - name: dbt deps
+        working-directory: dbt
+        run: |
+          dbt deps --profiles-dir $HOME/.dbt
+
+      - name: dbt seed
+        working-directory: dbt
+        run: |
+          dbt seed --profiles-dir $HOME/.dbt --vars '{"bronze_dataset": "${{ env.CI_DATASET }}"}'
+
+      - name: dbt build
+        working-directory: dbt
+        run: |
+          dbt build --profiles-dir $HOME/.dbt --vars '{"bronze_dataset": "${{ env.CI_DATASET }}"}'
+
+      - name: Tear down ephemeral CI dataset
+        if: always()
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/ci-sa-key.json
+        run: |
+          python -c "
+          from google.cloud import bigquery
+          client = bigquery.Client(project='${{ env.CI_PROJECT_ID }}')
+          client.delete_dataset('${{ env.CI_DATASET }}', delete_contents=True, not_found_ok=True)
+          print('Deleted ephemeral dataset: ${{ env.CI_DATASET }}')
+          "
+
+  terraform-plan:
+    runs-on: ubuntu-latest
+    env:
+      TF_PROJECT_ID: flip-dev-503300
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.0"
+
+      - name: Write Terraform admin key
+        run: echo '${{ secrets.GCP_TERRAFORM_ADMIN_KEY }}' > ${{ github.workspace }}/terraform-admin-key.json
+
+      - name: Terraform init and plan
+        working-directory: infra
+        timeout-minutes: 5
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/terraform-admin-key.json
+        run: |
+          terraform init -input=false
+          terraform plan -input=false -no-color -var="project_id=flip-dev-503300" -var="region=us-central1" -var="dataset_location=us"
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker images
+        run: docker compose build

@@ -13,4 +13,4 @@ select
   entered_at,
   _ingested_at,
   _source_file
-from {{ ref('downtime_events') }}
+from {{ source('bronze', 'downtime_events') }}
