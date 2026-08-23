@@ -12,6 +12,7 @@ select
     'run_date', 
     'run_sequence_number'
   ]) }} as run_id,
+  log_reference_number,
   machine_id,
   shift_id,
   product_id,

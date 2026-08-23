@@ -34,8 +34,34 @@ def resolve_repo_root() -> Path:
     return path.parent
 
 REPO_ROOT = resolve_repo_root()
-DBT_CMD = shutil.which("dbt") or str(REPO_ROOT / ".venv-airflow" / "bin" / "dbt")
-DBT_PROFILES_DIR = os.environ.get("DBT_PROFILES_DIR", str(Path.home() / ".dbt"))
+
+
+def resolve_dbt_cmd() -> str:
+    if os.environ.get("DBT_CMD"):
+        return os.environ["DBT_CMD"]
+    if shutil.which("dbt"):
+        return shutil.which("dbt")
+    for venv_name in [".venv-fplip", ".venv-airflow", ".venv"]:
+        candidate = REPO_ROOT / venv_name / "bin" / "dbt"
+        if candidate.exists():
+            return str(candidate)
+    return "/opt/airflow/.venv-fplip/bin/dbt"
+
+
+def resolve_dbt_profiles_dir() -> str:
+    if os.environ.get("DBT_PROFILES_DIR"):
+        return os.environ["DBT_PROFILES_DIR"]
+    dbt_dir = REPO_ROOT / "dbt"
+    if (dbt_dir / "profiles.yml").exists():
+        return str(dbt_dir)
+    home_dbt = Path.home() / ".dbt"
+    if (home_dbt / "profiles.yml").exists():
+        return str(home_dbt)
+    return str(dbt_dir)
+
+
+DBT_CMD = resolve_dbt_cmd()
+DBT_PROFILES_DIR = resolve_dbt_profiles_dir()
 CI_MODE = os.environ.get("CI", "false").lower() in ("1", "true") or os.environ.get("GITHUB_ACTIONS") is not None
 
 # Default arguments for all tasks

@@ -63,8 +63,8 @@ def test_successful_load():
                 "product_id": ["P-BLOCK-01"],
                 "run_date": [TEST_DATE.isoformat()],
                 "run_sequence_number": [1],
-                "run_start_time": [None],
-                "run_end_time": [None],
+                "run_start_time": [datetime.now().isoformat()],
+                "run_end_time": [datetime.now().isoformat()],
                 "planned_units": [100],
                 "produced_units": [95],
                 "good_units": [90],
@@ -91,7 +91,7 @@ def test_successful_load():
         query = f"""
         SELECT COUNT(*) as row_count
         FROM `{PROJECT_ID}.{DATASET}.production_runs`
-        WHERE _PARTITIONTIME = '{TEST_DATE.isoformat()}'
+        WHERE DATE(_ingested_at) = '{TEST_DATE.isoformat()}'
         AND log_reference_number = 'TEST-001'
         """
         result = list(client.query(query).result())
@@ -141,7 +141,7 @@ def test_idempotent_rerun():
     query = f"""
     SELECT COUNT(*) as row_count
     FROM `{PROJECT_ID}.{DATASET}.production_runs`
-    WHERE _PARTITIONTIME = '{TEST_DATE.isoformat()}'
+    WHERE DATE(_ingested_at) = '{TEST_DATE.isoformat()}'
     AND log_reference_number = 'IDEMPOTENT-001'
     """
     result = list(client.query(query).result())
