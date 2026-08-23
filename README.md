@@ -8,26 +8,26 @@ An end-to-end Enterprise Data Platform, Machine Learning Engine, Operational Web
 
 ```mermaid
 flowchart TD
-    subgraph Data Sources & Ingestion
-        A1[Factory IoT Sensors / Synthetic Data Generator] -->|CSVs| B1[Bronze Ingestion Engine]
-        B1 -->|Contract Validation| B2[BigQuery Bronze Layer]
+    subgraph "Data Sources & Ingestion"
+        A1["Factory IoT Sensors / Synthetic Data Generator"] -->|CSVs| B1["Bronze Ingestion Engine"]
+        B1 -->|Contract Validation| B2["BigQuery Bronze Layer"]
     end
 
-    subgraph Data Transformation & Warehouse (fplip-core)
-        B2 -->|dbt Models| C1[Silver Layer Cleaned & Modelled]
-        C1 -->|dbt Transformations| C2[Gold Layer OEE & Loss Attribution Data Mart]
-        C2 -->|Scikit-learn ML Pipeline| C3[Scrap Risk Classification Model]
+    subgraph "Data Transformation & Warehouse (fplip-core)"
+        B2 -->|dbt Models| C1["Silver Layer Cleaned & Modelled"]
+        C1 -->|dbt Transformations| C2["Gold Layer OEE & Loss Attribution Data Mart"]
+        C2 -->|Scikit-learn ML Pipeline| C3["Scrap Risk Classification Model"]
     end
 
-    subgraph Serving & Execution Layer
-        C2 --> D1[FastAPI High-Performance Serving API]
+    subgraph "Serving & Execution Layer"
+        C2 --> D1["FastAPI High-Performance Serving API"]
         C3 --> D1
-        D1 -->|Cached Endpoints| E1[Laravel Investigate Operational App]
-        C2 -->|SQLAlchemy / BigQuery| E2[Apache Superset BI Dashboards]
+        D1 -->|Cached Endpoints| E1["Laravel Investigate Operational App"]
+        C2 -->|SQLAlchemy / BigQuery| E2["Apache Superset BI Dashboards"]
     end
 
-    subgraph Workflow Orchestration
-        F1[Apache Airflow Docker DAGs] -->|Triggers & Validates| B1
+    subgraph "Workflow Orchestration"
+        F1["Apache Airflow Docker DAGs"] -->|Triggers & Validates| B1
         F1 -->|Runs| C1
     end
 ```
