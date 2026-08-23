@@ -2,6 +2,10 @@
 
 An end-to-end Enterprise Data Platform, Machine Learning Engine, Operational Web Application, and Business Intelligence Visualization Suite built for real-time manufacturing performance monitoring, automated loss attribution, and AI-assisted investigation workflows.
 
+> [!NOTE]
+> **Engineering History & CI/CD Repository**:  
+> For the complete step-by-step commit history documenting the incremental pipeline construction, Terraform infrastructure configuration, and GitHub Actions CI/CD workflow developments, refer to the original repository: **[laila-kz/FPLIP](https://github.com/laila-kz/FPLIP)**.
+
 ---
 
 ## 🌟 Architecture Overview
