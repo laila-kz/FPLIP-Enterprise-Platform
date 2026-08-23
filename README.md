@@ -32,6 +32,10 @@ flowchart TD
     end
 ```
 
+### Medallion Architecture Lineage & BigQuery Storage
+![Data Lineage Graph](assets/screenshots/lineage_graph_week5.png)
+*Figure 1: Automated dbt Medallion Lineage Graph (Bronze $\rightarrow$ Silver $\rightarrow$ Gold)*
+
 ---
 
 ## 🛠️ Tech Stack & Key Technologies
@@ -44,6 +48,72 @@ flowchart TD
 | **Operational Web App** | Laravel 11, SQLite/MySQL, Blade Templates, Tailwind CSS, Vite |
 | **BI & Analytics** | Apache Superset, Docker Compose, ECharts |
 | **Infrastructure & CI/CD** | Terraform (GCP IaC), GitHub Actions CI/CD |
+
+---
+
+## 🚀 Key System Features & Screenshots
+
+### 1. Data Pipeline & Automated Quality Controls (`fplip-core`)
+- **Bronze → Silver → Gold Architecture**: Automated medallion architecture inside BigQuery.
+- **Shift-Left Data Contracts**: Incoming CSV event logs are validated against YAML contracts before ingestion.
+- **Idempotent Airflow Ingestion**: Airflow DAGs enforce partition-decorator loads with `WRITE_TRUNCATE` semantics.
+- **Hand-Rolled SCD2 Dimensions**: Tracks machine and product historical state changes using DDL window functions.
+
+![Data Contract Validation](assets/screenshots/contract_validator.png)
+*Figure 2: Shift-Left YAML Data Contract Validation prior to Bronze Ingestion*
+
+![Partitioned BigQuery Datasets](assets/screenshots/week2_day3_partitioned_table.png)
+*Figure 3: Day-Partitioned BigQuery Sandbox Dataset Layout*
+
+---
+
+### 2. Workflow Orchestration & Automated DAGs
+- **Airflow DAGs**: Parallel extraction, contract checking, dbt transformations, and data quality assertions.
+- **Slack Alerting**: On-failure callbacks send immediate Slack notifications with log excerpts.
+
+![Airflow DAGs Overview](assets/demo-screenshots/13_airflow_dags_overview.png)
+*Figure 4: Apache Airflow Web UI DAGs Overview (`ingestion_dag`, `dbt_transform_dag`, `data_quality_dag`)*
+
+---
+
+### 3. Operational Investigation Application (`fplip-investigate`)
+- **Role-Based Access Control (RBAC)**: Dedicated interfaces for Plant Managers and Line Technicians.
+- **Automated Anomaly Detection**: Signals trigger work orders when OEE drops below 75% or scrap exceeds 5%.
+- **Ground AI Copilot**: Grounded Gemini AI diagnostic drawer restricted to 4 deterministic tool functions.
+- **Technician Work Order Form**: Floor-level repair logging, physical finding description, and audit trail generation.
+
+![Plant Signal Intelligence Dashboard](assets/demo-screenshots/16_plant_signal_intelligence_dashboard.png)
+*Figure 5: Plant Signal Intelligence Dashboard showing Live Telemetry Stream and Shift Filters*
+
+![Active Plant Signals Cards](assets/demo-screenshots/17_active_plant_signals_cards.png)
+*Figure 6: Active Anomaly Signal Cards triggering automated investigation work orders*
+
+![Gemini AI Operational Diagnostic](assets/demo-screenshots/18_gemini_ai_operational_diagnostic.png)
+*Figure 7: Grounded Gemini AI Diagnostic drawer providing plain-language executive summaries and actions*
+
+![Technician Root Cause Submission Form](assets/demo-screenshots/19_technician_root_cause_submission_form.png)
+*Figure 8: Line Technician Root Cause Submission Form and Corrective Action Entry*
+
+---
+
+### 4. Business Intelligence & Dashboards (`fplip-bi`)
+- **4-Row Storytelling Dashboard**: Executive KPI header, temporal trends, dimensional breakdowns, and scrap loss pareto.
+- **4-Hour TTL Caching**: In-memory query caching to optimize BigQuery Sandbox query limits.
+
+![Apache Superset Dashboard Export](assets/screenshots/superset_dashboard_export.jpg)
+*Figure 9: Apache Superset 4-Row Storytelling OEE & Scrap Root Cause Analytics Dashboard*
+
+---
+
+### 5. Grounded ML Scrap Risk Classifier & CI/CD Pipeline
+- **Logistic Regression Model**: Predicts high-risk scrap batches with high mathematical interpretability.
+- **CI/CD Per-PR Isolation**: GitHub Actions 5-job workflow featuring ephemeral per-PR BigQuery datasets.
+
+![ML Scrap Risk Model Training](assets/demo-screenshots/12_full_dataset_ml_training_metrics.png)
+*Figure 10: Machine Learning Scrap Risk Classification Model Training Metrics & Confusion Matrix*
+
+![CI Workflow Success](assets/screenshots/ci_workflow_success.png)
+*Figure 11: GitHub Actions 5-Job CI/CD Workflow Execution Success*
 
 ---
 
@@ -81,44 +151,35 @@ flowchart TD
 │   └── runbooks/                     # Operational runbooks & test execution reports
 │
 ├── assets/                           # Portfolio Screenshots & Visual Evidence
-│   └── screenshots/                  # Benchmark runs, DAG logs, GCP console verifications
+│   ├── screenshots/                  # Standardized pipeline run evidence & GCP verifications
+│   └── demo-screenshots/             # Categorized application UI & CLI execution screenshots
 │
+├── rapport/                          # Academic Report LaTeX Source (`report.tex`, `references.bib`)
 ├── .env.example                      # Global environment template
 └── README.md                         # Master Portfolio Overview README
 ```
 
 ---
 
-## 🚀 Key System Features
+## 📊 Portfolio Screenshots & Evidence Catalog
 
-### 1. Data Pipeline & Automated Quality Controls (`fplip-core`)
-- **Bronze → Silver → Gold Architecture**: Automated medallion architecture inside BigQuery.
-- **Contract Enforcement**: Incoming CSV files are strictly validated against YAML data contracts before ingestion.
-- **Idempotent Airflow Ingestion**: Airflow DAGs ensure idempotent execution with date partitioning.
-- **ML Scrap Risk Classifier**: Machine learning model predicts high-risk scrap batches in real time.
+System execution, BigQuery schema enforcement, and CI workflow run verifications are documented under [`assets/screenshots/`](assets/screenshots) and [`assets/demo-screenshots/`](assets/demo-screenshots):
 
-### 2. Operational Investigation Application (`fplip-investigate`)
-- **Role-Based Access**: Specialized interfaces for Plant Managers and Technicians.
-- **Automated Task Management**: Triggers investigation tasks when OEE drops below 15% or scrap spikes above 20%.
-- **AI-Powered Explanations**: Integrates with LLM APIs to generate plain-language explanations of complex anomaly root causes.
-- **Photo Upload & Audit Trail**: Complete evidentiary tracking for plant floor resolution.
-
-### 3. Business Intelligence & Dashboards (`fplip-bi`)
-- **OEE Pareto & Trend Visualizations**: Instant visibility into Availability, Performance, and Quality losses.
-- **Factory Performance Dashboard**: Deep-dive analytics on equipment downtime and scrap rate spikes.
-
----
-
-## 📊 Portfolio Screenshots & Evidence
-
-System execution, BigQuery schema enforcement, and CI workflow run verifications are documented under [`assets/screenshots/`](file:///c:/Users/kheza/Downloads/project%20zip/project%20zip/assets/screenshots):
-
-- **[BigQuery Sandbox Active](file:///c:/Users/kheza/Downloads/project%20zip/project%20zip/assets/screenshots/BigQuery%20SandBox%20active.png)**
-- **[CI Workflow Verification](file:///c:/Users/kheza/Downloads/project%20zip/project%20zip/assets/screenshots/CI-workflow%20success.png)**
-- **[Data Contract Validation](file:///c:/Users/kheza/Downloads/project%20zip/project%20zip/assets/screenshots/Contract%20Validator.png)**
-- **[Airflow Ingestion DAG](file:///c:/Users/kheza/Downloads/project%20zip/project%20zip/assets/screenshots/dbt_transform_dag.png)**
-- **[Partitioned BigQuery Datasets](file:///c:/Users/kheza/Downloads/project%20zip/project%20zip/assets/screenshots/week2-day3-partitioned-table.png)**
-- **[Data Lineage Graph](file:///c:/Users/kheza/Downloads/project%20zip/project%20zip/assets/screenshots/lineage%20graph%20week5.png)**
+| Category | Evidence Screenshot Link | Description |
+| :--- | :--- | :--- |
+| **Warehouse & Infrastructure** | [BigQuery Sandbox Active](assets/screenshots/bq_sandbox_active.png) | Active GCP BigQuery Sandbox project workspace |
+| **Governance & Ingestion** | [Data Contract Validator](assets/screenshots/contract_validator.png) | Pre-ingestion YAML schema contract validation |
+| **Partitioning & Loading** | [Partitioned BigQuery Tables](assets/screenshots/week2_day3_partitioned_table.png) | Ingestion partitioning by `_ingested_at` day decorator |
+| **Transformations & Lineage** | [Data Lineage Graph](assets/screenshots/lineage_graph_week5.png) | Complete dbt Medallion DAG lineage graph |
+| **dbt Build & Testing** | [dbt Model Build Success](assets/demo-screenshots/06_dbt_models_build_success.png) | Successful build of 13 table and 10 view models |
+| **Quality Assertions** | [dbt Test Suite Execution](assets/demo-screenshots/07_dbt_test_suite_execution.png) | Pass rate across 85 schema, domain & unit tests |
+| **Orchestration** | [Airflow DAGs Overview](assets/demo-screenshots/13_airflow_dags_overview.png) | Airflow UI showing active ingestion & transform DAGs |
+| **Web App - Overview** | [Plant Signal Intelligence](assets/demo-screenshots/16_plant_signal_intelligence_dashboard.png) | Operational OEE telemetry stream and shift filters |
+| **Web App - AI Grounding** | [Gemini AI Diagnostic](assets/demo-screenshots/18_gemini_ai_operational_diagnostic.png) | Tool-calling grounded LLM root cause synthesis |
+| **Web App - Fix Workflow** | [Technician Submission Form](assets/demo-screenshots/19_technician_root_cause_submission_form.png) | Technician work order fix & audit trail entry |
+| **Visual Analytics** | [Superset BI Dashboard](assets/screenshots/superset_dashboard_export.jpg) | Executive 4-Row OEE storytelling dashboard |
+| **Machine Learning** | [ML Scrap Model Training](assets/demo-screenshots/12_full_dataset_ml_training_metrics.png) | Logistic Regression training report and metrics |
+| **CI/CD Pipeline** | [CI Workflow Verification](assets/screenshots/ci_workflow_success.png) | 5-job GitHub Actions workflow with ephemeral PR isolation |
 
 ---
 
@@ -150,5 +211,6 @@ Access Superset at `http://localhost:8088`.
 
 ---
 
-## 📄 Documentation Hub
-For in-depth architectural design, data dictionaries, decision records, and operational runbooks, refer to the **[Technical Documentation Hub](file:///c:/Users/kheza/Downloads/project%20zip/project%20zip/docs/README.md)**.
+## 📄 Documentation Hub & Academic Report
+- For in-depth architectural design, data dictionaries, decision records, and operational runbooks, refer to the **[Technical Documentation Hub](docs/README.md)**.
+- For the full 12-chapter academic report LaTeX source and references, refer to **[Academic Report Directory](rapport/README.md)**.

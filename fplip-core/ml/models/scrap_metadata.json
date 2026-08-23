@@ -7,10 +7,10 @@
     "shift_avg_scrap_rate",
     "is_night_shift"
   ],
-  "train_size": 674,
-  "test_size": 169,
-  "class_balance_positive": 0.22419928825622776,
-  "risk_threshold": 0.2891670210822293,
+  "train_size": 1218,
+  "test_size": 305,
+  "class_balance_positive": 0.22193040052527904,
+  "risk_threshold": 0.30386928515304085,
   "model_type": "LogisticRegression",
-  "training_date": "2026-08-19T20:13:27.003085"
+  "training_date": "2026-08-23T22:55:37.228183"
 }

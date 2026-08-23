@@ -1,0 +1,197 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\abx@aux@refcontext{none/global//global/global/global}
+\@writefile{toc}{\contentsline {chapter}{\numberline {1}Introduction}{7}{chapter.1}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{chap:introduction}{{1}{7}{Introduction}{chapter.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.1}Business Context}{7}{section.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1.2}Problem Statement}{7}{section.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1.3}Project Objectives}{8}{section.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1.4}Scope and Boundary Constraints}{9}{section.1.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1.5}Report Roadmap}{9}{section.1.5}\protected@file@percent }
+\abx@aux@cite{0}{databricks_medallion}
+\abx@aux@segm{0}{0}{databricks_medallion}
+\abx@aux@cite{0}{inmon_dw}
+\abx@aux@segm{0}{0}{inmon_dw}
+\abx@aux@cite{0}{kimball_dwtoolkit}
+\abx@aux@segm{0}{0}{kimball_dwtoolkit}
+\abx@aux@cite{0}{data_contracts_guide}
+\abx@aux@segm{0}{0}{data_contracts_guide}
+\abx@aux@cite{0}{dbt_contracts}
+\abx@aux@segm{0}{0}{dbt_contracts}
+\abx@aux@cite{0}{data_contracts_guide}
+\abx@aux@segm{0}{0}{data_contracts_guide}
+\@writefile{toc}{\contentsline {chapter}{\numberline {2}Literature Review}{10}{chapter.2}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{chap:literature_review}{{2}{10}{Literature Review}{chapter.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.1}Medallion Architecture in Modern Data Lakehouses}{10}{section.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.2}Data Contracts and Shift-Left Governance}{10}{section.2.2}\protected@file@percent }
+\abx@aux@cite{0}{kleppmann_ddia}
+\abx@aux@segm{0}{0}{kleppmann_ddia}
+\abx@aux@cite{0}{kimball_dwtoolkit}
+\abx@aux@segm{0}{0}{kimball_dwtoolkit}
+\abx@aux@cite{0}{google_bq_sandbox}
+\abx@aux@segm{0}{0}{google_bq_sandbox}
+\@writefile{toc}{\contentsline {section}{\numberline {2.3}Idempotency and Load Safety in Data Pipelines}{11}{section.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.4}Slowly Changing Dimensions (SCD Type 2)}{11}{section.2.4}\protected@file@percent }
+\abx@aux@cite{0}{nakajima_tpm}
+\abx@aux@segm{0}{0}{nakajima_tpm}
+\abx@aux@cite{0}{iso_22400}
+\abx@aux@segm{0}{0}{iso_22400}
+\abx@aux@cite{0}{dbt_testing_docs}
+\abx@aux@segm{0}{0}{dbt_testing_docs}
+\@writefile{toc}{\contentsline {section}{\numberline {2.5}DML vs DDL Constraints in Cloud Sandbox Environments}{12}{section.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.6}Overall Equipment Effectiveness (OEE) and Loss Attribution}{12}{section.2.6}\protected@file@percent }
+\abx@aux@cite{0}{vaswani_attention}
+\abx@aux@segm{0}{0}{vaswani_attention}
+\@writefile{toc}{\contentsline {section}{\numberline {2.7}Data Pipeline Testing Taxonomies}{13}{section.2.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.8}AI Agent Safety and Grounded Function Calling}{13}{section.2.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}System Architecture}{14}{chapter.3}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{chap:system_architecture}{{3}{14}{System Architecture}{chapter.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}High-Level Platform Architecture}{14}{section.3.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces FPLIP high-level architecture diagram detailing the data pipeline from raw logs to operational applications.}}{14}{figure.3.1}\protected@file@percent }
+\newlabel{fig:high_level_arch}{{3.1}{14}{FPLIP high-level architecture diagram detailing the data pipeline from raw logs to operational applications}{figure.3.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}Technology Stack and Decision Rationale}{14}{section.3.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces GCP BigQuery Sandbox active project workspace verifying zero-cost cloud deployment and isolated dataset setup.}}{15}{figure.3.2}\protected@file@percent }
+\newlabel{fig:bq_sandbox_active}{{3.2}{15}{GCP BigQuery Sandbox active project workspace verifying zero-cost cloud deployment and isolated dataset setup}{figure.3.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Automated dbt Medallion Lineage Graph displaying Bronze staging views, Silver dimensions/facts, and Gold OEE data marts.}}{15}{figure.3.3}\protected@file@percent }
+\newlabel{fig:lineage_graph}{{3.3}{15}{Automated dbt Medallion Lineage Graph displaying Bronze staging views, Silver dimensions/facts, and Gold OEE data marts}{figure.3.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3.1}{\ignorespaces FPLIP Technology Stack and Architectural Rationale}}{16}{table.3.1}\protected@file@percent }
+\newlabel{tab:tech_stack}{{3.1}{16}{FPLIP Technology Stack and Architectural Rationale}{table.3.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}ELT vs. Traditional ETL Design Choice}{17}{section.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.4}Separation of Serving Concerns}{17}{section.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {4}Data Pipeline Implementation}{18}{chapter.4}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{chap:data_pipeline}{{4}{18}{Data Pipeline Implementation}{chapter.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}Bronze Layer: Raw Ingestion and Data Contracts}{18}{section.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Pre-Ingestion Data Contracts}{18}{subsection.4.1.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Shift-left YAML data contract pre-ingestion validation output verifying non-null, type, and value range integrity.}}{18}{figure.4.1}\protected@file@percent }
+\newlabel{fig:contract_validation}{{4.1}{18}{Shift-left YAML data contract pre-ingestion validation output verifying non-null, type, and value range integrity}{figure.4.1}{}}
+\newlabel{lst:yaml_contract}{{4.1}{18}{YAML Data Contract for Quality Control Inspections (\texttt {contracts/qc.yaml})}{lstlisting.4.1}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4.1}YAML Data Contract for Quality Control Inspections (\texttt  {contracts/qc.yaml})}{18}{lstlisting.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}Idempotent Load Pattern}{19}{subsection.4.1.2}\protected@file@percent }
+\newlabel{lst:bronze_loader}{{4.2}{19}{Idempotent Partition Load Implementation (\texttt {ingestion/bronze\_loader.py})}{lstlisting.4.2}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4.2}Idempotent Partition Load Implementation (\texttt  {ingestion/bronze\_loader.py})}{19}{lstlisting.4.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces BigQuery Sandbox table partition details displaying daily \texttt  {\_ingested\_at} partition decorators and clustering.}}{20}{figure.4.2}\protected@file@percent }
+\newlabel{fig:partitioned_tables}{{4.2}{20}{BigQuery Sandbox table partition details displaying daily \texttt {\_ingested\_at} partition decorators and clustering}{figure.4.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}Silver Layer: Cleaning, Dimensionality, and Hand-Rolled SCD2}{20}{section.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Staging Views and Dimensional Modeling}{20}{subsection.4.2.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces dbt execution log building Silver staging views, dimensions, fact tables, and Gold OEE analytical marts.}}{21}{figure.4.3}\protected@file@percent }
+\newlabel{fig:dbt_transform_run}{{4.3}{21}{dbt execution log building Silver staging views, dimensions, fact tables, and Gold OEE analytical marts}{figure.4.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Hand-Rolled SCD Type 2 Without MERGE}{21}{subsection.4.2.2}\protected@file@percent }
+\newlabel{lst:scd2_ddl}{{4.3}{21}{Hand-Rolled SCD2 DDL Pattern for \texttt {dim\_machine}}{lstlisting.4.3}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4.3}Hand-Rolled SCD2 DDL Pattern for \texttt  {dim\_machine}}{21}{lstlisting.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Silver Testing Taxonomies}{22}{subsection.4.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}Gold Layer: Aggregated Analytical Marts}{22}{section.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}OEE Computation and Loss Attribution (\texttt  {oee\_daily})}{22}{subsection.4.3.1}\protected@file@percent }
+\newlabel{lst:oee_gold}{{4.4}{22}{Gold Mart OEE and Loss Attribution Logic (\texttt {models/gold/oee\_daily.sql})}{lstlisting.4.4}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4.4}Gold Mart OEE and Loss Attribution Logic (\texttt  {models/gold/oee\_daily.sql})}{22}{lstlisting.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}Scrap Root-Cause Attribution (\texttt  {scrap\_root\_cause\_summary})}{23}{subsection.4.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.3}Gold Verification: Model Contracts and Singular Tests}{23}{subsection.4.3.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces dbt test suite execution verifying 85 assertions across generic schema tests, singular domain invariants, and unit tests.}}{24}{figure.4.4}\protected@file@percent }
+\newlabel{fig:dbt_test_suite}{{4.4}{24}{dbt test suite execution verifying 85 assertions across generic schema tests, singular domain invariants, and unit tests}{figure.4.4}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Orchestration \& Automation}{25}{chapter.5}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{chap:orchestration}{{5}{25}{Orchestration \& Automation}{chapter.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}Airflow Orchestration DAGs}{25}{section.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}Pipeline Script Chaining (\texttt  {run\_pipeline.sh})}{25}{section.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}Slack Alerting and Operational Callbacks}{25}{section.5.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces Apache Airflow Web UI DAG Overview displaying active orchestration DAGs (\texttt  {ingestion\_dag}, \texttt  {dbt\_transform\_dag}, \texttt  {data\_quality\_dag}).}}{26}{figure.5.1}\protected@file@percent }
+\newlabel{fig:airflow_dags}{{5.1}{26}{Apache Airflow Web UI DAG Overview displaying active orchestration DAGs (\texttt {ingestion\_dag}, \texttt {dbt\_transform\_dag}, \texttt {data\_quality\_dag})}{figure.5.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.4}CI/CD Pipeline with Ephemeral Datasets}{26}{section.5.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces GitHub Actions 5-job CI/CD workflow execution success with ephemeral per-PR BigQuery dataset isolation.}}{27}{figure.5.2}\protected@file@percent }
+\newlabel{fig:ci_workflow}{{5.2}{27}{GitHub Actions 5-job CI/CD workflow execution success with ephemeral per-PR BigQuery dataset isolation}{figure.5.2}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Web Application (Laravel)}{28}{chapter.6}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{chap:web_application}{{6}{28}{Web Application (Laravel)}{chapter.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Application Architecture and RBAC}{28}{section.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}Investigation Lifecycle Workflow}{28}{section.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.3}Audit Trail Governance}{28}{section.6.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces FPLIP Investigate operational web application secure login interface with Role-Based Access Control (RBAC).}}{29}{figure.6.1}\protected@file@percent }
+\newlabel{fig:laravel_login}{{6.1}{29}{FPLIP Investigate operational web application secure login interface with Role-Based Access Control (RBAC)}{figure.6.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces Plant Signal Intelligence Dashboard showing live shift telemetry streams, OEE component breakdowns, and active signal cards.}}{29}{figure.6.2}\protected@file@percent }
+\newlabel{fig:plant_signals_dash}{{6.2}{29}{Plant Signal Intelligence Dashboard showing live shift telemetry streams, OEE component breakdowns, and active signal cards}{figure.6.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces Active Anomaly Signal Cards displaying real-time OEE drops, scrap spikes, and direct investigation dispatch triggers.}}{30}{figure.6.3}\protected@file@percent }
+\newlabel{fig:active_plant_signals}{{6.3}{30}{Active Anomaly Signal Cards displaying real-time OEE drops, scrap spikes, and direct investigation dispatch triggers}{figure.6.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.4}ML Scrap Risk \& AI Copilot UI Integration}{30}{section.6.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.4}{\ignorespaces Grounded Gemini AI Operational Diagnostic drawer presenting executive summaries, recommended actions, and preventative countermeasures.}}{31}{figure.6.4}\protected@file@percent }
+\newlabel{fig:gemini_ai_diagnostic}{{6.4}{31}{Grounded Gemini AI Operational Diagnostic drawer presenting executive summaries, recommended actions, and preventative countermeasures}{figure.6.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.5}{\ignorespaces Line Technician Root Cause Submission Form for submitting physical findings, corrective actions, and routing for manager approval.}}{31}{figure.6.5}\protected@file@percent }
+\newlabel{fig:technician_work_order}{{6.5}{31}{Line Technician Root Cause Submission Form for submitting physical findings, corrective actions, and routing for manager approval}{figure.6.5}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Dashboard \& Visualization (Superset)}{32}{chapter.7}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{chap:dashboard}{{7}{32}{Dashboard \& Visualization (Superset)}{chapter.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.1}Apache Superset Architecture}{32}{section.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7.2}4-Row Storytelling Dashboard Layout}{32}{section.7.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces Apache Superset 4-Row Storytelling OEE \& Scrap Root Cause Analytics Dashboard.}}{33}{figure.7.1}\protected@file@percent }
+\newlabel{fig:superset_dashboard}{{7.1}{33}{Apache Superset 4-Row Storytelling OEE \& Scrap Root Cause Analytics Dashboard}{figure.7.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.3}Global Filters and TTL Caching Strategy}{34}{section.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {8}ML \& AI Integration}{35}{chapter.8}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{chap:ml_ai}{{8}{35}{ML \& AI Integration}{chapter.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.1}Scrap Risk Prediction via Logistic Regression}{35}{section.8.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8.1}{\ignorespaces Scikit-learn Logistic Regression scrap risk prediction model training metrics, classification report, and confusion matrix.}}{35}{figure.8.1}\protected@file@percent }
+\newlabel{fig:ml_scrap_training}{{8.1}{35}{Scikit-learn Logistic Regression scrap risk prediction model training metrics, classification report, and confusion matrix}{figure.8.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1.1}Model Selection and Interpretability}{35}{subsection.8.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1.2}Feature Engineering and Leakage Prevention}{36}{subsection.8.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8.2}Grounded AI Copilot via Tool-Calling Functions}{36}{section.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.1}Architecture of the Four Grounded Tools}{36}{subsection.8.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {9}Results \& Validation}{37}{chapter.9}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{chap:results}{{9}{37}{Results \& Validation}{chapter.9}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {9.1}Cold-Restart Reproducibility}{37}{section.9.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {9.2}Synthetic Data Audit and Data Quality Metrics}{37}{section.9.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {9.3}Serving Latency Performance Metrics}{37}{section.9.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {9.1}{\ignorespaces FPLIP Automated Validation and Data Quality Results}}{38}{table.9.1}\protected@file@percent }
+\newlabel{tab:test_results}{{9.1}{38}{FPLIP Automated Validation and Data Quality Results}{table.9.1}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {10}Challenges \& Solutions}{40}{chapter.10}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{chap:challenges}{{10}{40}{Challenges \& Solutions}{chapter.10}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {10.1}BigQuery Sandbox DML Restrictions}{40}{section.10.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {10.2}Pre-Demo Audit Discovery of ML Endpoint Placeholder}{40}{section.10.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {10.3}CI/CD Ephemeral Dataset State Isolation}{40}{section.10.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {10.4}Root-Cause Metadata Loss in Unlinked Records}{41}{section.10.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {11}Conclusion \& Future Work}{42}{chapter.11}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{chap:conclusion}{{11}{42}{Conclusion \& Future Work}{chapter.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {11.1}Summary of Contributions}{42}{section.11.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {11.2}Transferable Data Engineering Principles}{42}{section.11.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {11.3}Future Research Directions}{43}{section.11.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {A}ADR Summaries}{44}{appendix.A}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{app:adr}{{A}{44}{ADR Summaries}{appendix.A}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.1}ADR-001: Selection of Zero-Cost GCP BigQuery Sandbox}{44}{section.A.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A.2}ADR-002: Shift-Left Governance via Pre-Ingestion Data Contracts}{44}{section.A.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A.3}ADR-003: Idempotent Partition-Decorator Ingestion}{44}{section.A.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A.4}ADR-004: Hand-Rolled DDL-Only SCD Type 2 Tracking}{45}{section.A.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A.5}ADR-005: Grounded Tool-Calling Architecture for AI Copilot}{45}{section.A.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {B}Key Code Snippets}{46}{appendix.B}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{app:code}{{B}{46}{Key Code Snippets}{appendix.B}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.1}FastAPI Endpoint Implementation (\texttt  {api/routers/scrap.py})}{46}{section.B.1}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.1}FastAPI Endpoint with In-Memory TTL Cache}{46}{lstlisting.B.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {C}Data Dictionary}{48}{appendix.C}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{app:dictionary}{{C}{48}{Data Dictionary}{appendix.C}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {C.1}{\ignorespaces Data Dictionary: \texttt  {fplip\_gold.oee\_daily}}}{48}{table.C.1}\protected@file@percent }
+\newlabel{tab:data_dict_gold}{{C.1}{48}{Data Dictionary: \texttt {fplip\_gold.oee\_daily}}{table.C.1}{}}
+\abx@aux@read@bbl@mdfivesum{nobblfile}
+\abx@aux@read@bblrerun
+\gdef \@abspage@last{50}

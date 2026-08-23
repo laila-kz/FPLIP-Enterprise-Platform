@@ -1,0 +1,74 @@
+\contentsline {chapter}{\numberline {1}Introduction}{7}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Business Context}{7}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Problem Statement}{7}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Project Objectives}{8}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Scope and Boundary Constraints}{9}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Report Roadmap}{9}{section.1.5}%
+\contentsline {chapter}{\numberline {2}Literature Review}{10}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Medallion Architecture in Modern Data Lakehouses}{10}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Data Contracts and Shift-Left Governance}{10}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Idempotency and Load Safety in Data Pipelines}{11}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Slowly Changing Dimensions (SCD Type 2)}{11}{section.2.4}%
+\contentsline {section}{\numberline {2.5}DML vs DDL Constraints in Cloud Sandbox Environments}{12}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Overall Equipment Effectiveness (OEE) and Loss Attribution}{12}{section.2.6}%
+\contentsline {section}{\numberline {2.7}Data Pipeline Testing Taxonomies}{13}{section.2.7}%
+\contentsline {section}{\numberline {2.8}AI Agent Safety and Grounded Function Calling}{13}{section.2.8}%
+\contentsline {chapter}{\numberline {3}System Architecture}{14}{chapter.3}%
+\contentsline {section}{\numberline {3.1}High-Level Platform Architecture}{14}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Technology Stack and Decision Rationale}{14}{section.3.2}%
+\contentsline {section}{\numberline {3.3}ELT vs. Traditional ETL Design Choice}{17}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Separation of Serving Concerns}{17}{section.3.4}%
+\contentsline {chapter}{\numberline {4}Data Pipeline Implementation}{18}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Bronze Layer: Raw Ingestion and Data Contracts}{18}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Pre-Ingestion Data Contracts}{18}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Idempotent Load Pattern}{19}{subsection.4.1.2}%
+\contentsline {section}{\numberline {4.2}Silver Layer: Cleaning, Dimensionality, and Hand-Rolled SCD2}{20}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Staging Views and Dimensional Modeling}{20}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Hand-Rolled SCD Type 2 Without MERGE}{21}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Silver Testing Taxonomies}{22}{subsection.4.2.3}%
+\contentsline {section}{\numberline {4.3}Gold Layer: Aggregated Analytical Marts}{22}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}OEE Computation and Loss Attribution (\texttt {oee\_daily})}{22}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Scrap Root-Cause Attribution (\texttt {scrap\_root\_cause\_summary})}{23}{subsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.3.3}Gold Verification: Model Contracts and Singular Tests}{23}{subsection.4.3.3}%
+\contentsline {chapter}{\numberline {5}Orchestration \& Automation}{25}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Airflow Orchestration DAGs}{25}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Pipeline Script Chaining (\texttt {run\_pipeline.sh})}{25}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Slack Alerting and Operational Callbacks}{25}{section.5.3}%
+\contentsline {section}{\numberline {5.4}CI/CD Pipeline with Ephemeral Datasets}{26}{section.5.4}%
+\contentsline {chapter}{\numberline {6}Web Application (Laravel)}{28}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Application Architecture and RBAC}{28}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Investigation Lifecycle Workflow}{28}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Audit Trail Governance}{28}{section.6.3}%
+\contentsline {section}{\numberline {6.4}ML Scrap Risk \& AI Copilot UI Integration}{30}{section.6.4}%
+\contentsline {chapter}{\numberline {7}Dashboard \& Visualization (Superset)}{32}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Apache Superset Architecture}{32}{section.7.1}%
+\contentsline {section}{\numberline {7.2}4-Row Storytelling Dashboard Layout}{32}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Global Filters and TTL Caching Strategy}{34}{section.7.3}%
+\contentsline {chapter}{\numberline {8}ML \& AI Integration}{35}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Scrap Risk Prediction via Logistic Regression}{35}{section.8.1}%
+\contentsline {subsection}{\numberline {8.1.1}Model Selection and Interpretability}{35}{subsection.8.1.1}%
+\contentsline {subsection}{\numberline {8.1.2}Feature Engineering and Leakage Prevention}{36}{subsection.8.1.2}%
+\contentsline {section}{\numberline {8.2}Grounded AI Copilot via Tool-Calling Functions}{36}{section.8.2}%
+\contentsline {subsection}{\numberline {8.2.1}Architecture of the Four Grounded Tools}{36}{subsection.8.2.1}%
+\contentsline {chapter}{\numberline {9}Results \& Validation}{37}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Cold-Restart Reproducibility}{37}{section.9.1}%
+\contentsline {section}{\numberline {9.2}Synthetic Data Audit and Data Quality Metrics}{37}{section.9.2}%
+\contentsline {section}{\numberline {9.3}Serving Latency Performance Metrics}{37}{section.9.3}%
+\contentsline {chapter}{\numberline {10}Challenges \& Solutions}{40}{chapter.10}%
+\contentsline {section}{\numberline {10.1}BigQuery Sandbox DML Restrictions}{40}{section.10.1}%
+\contentsline {section}{\numberline {10.2}Pre-Demo Audit Discovery of ML Endpoint Placeholder}{40}{section.10.2}%
+\contentsline {section}{\numberline {10.3}CI/CD Ephemeral Dataset State Isolation}{40}{section.10.3}%
+\contentsline {section}{\numberline {10.4}Root-Cause Metadata Loss in Unlinked Records}{41}{section.10.4}%
+\contentsline {chapter}{\numberline {11}Conclusion \& Future Work}{42}{chapter.11}%
+\contentsline {section}{\numberline {11.1}Summary of Contributions}{42}{section.11.1}%
+\contentsline {section}{\numberline {11.2}Transferable Data Engineering Principles}{42}{section.11.2}%
+\contentsline {section}{\numberline {11.3}Future Research Directions}{43}{section.11.3}%
+\contentsline {chapter}{\numberline {A}ADR Summaries}{44}{appendix.A}%
+\contentsline {section}{\numberline {A.1}ADR-001: Selection of Zero-Cost GCP BigQuery Sandbox}{44}{section.A.1}%
+\contentsline {section}{\numberline {A.2}ADR-002: Shift-Left Governance via Pre-Ingestion Data Contracts}{44}{section.A.2}%
+\contentsline {section}{\numberline {A.3}ADR-003: Idempotent Partition-Decorator Ingestion}{44}{section.A.3}%
+\contentsline {section}{\numberline {A.4}ADR-004: Hand-Rolled DDL-Only SCD Type 2 Tracking}{45}{section.A.4}%
+\contentsline {section}{\numberline {A.5}ADR-005: Grounded Tool-Calling Architecture for AI Copilot}{45}{section.A.5}%
+\contentsline {chapter}{\numberline {B}Key Code Snippets}{46}{appendix.B}%
+\contentsline {section}{\numberline {B.1}FastAPI Endpoint Implementation (\texttt {api/routers/scrap.py})}{46}{section.B.1}%
+\contentsline {chapter}{\numberline {C}Data Dictionary}{48}{appendix.C}%

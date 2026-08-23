@@ -1,131 +1,97 @@
-# FPLIP — Factory Performance & Loss Intelligence Platform
+# ⚙️ FPLIP Core — Data Platform, dbt, Airflow & ML Engine
 
-## Architecture Overview
+The core engineering module of the **Factory Performance & Loss Intelligence Platform (FPLIP)**. It contains the synthetic data generation engine, shift-left YAML data contracts, BigQuery Medallion data warehouse models (`dbt`), Apache Airflow orchestration DAGs, Scikit-learn Machine Learning scrap classifier, and high-performance FastAPI serving tier.
 
-![GCP Topology](docs/gcp-topology.md)
+---
 
-**Zero-cost GCP Sandbox project** — no billing account linked.
+## 🌟 Component Architecture
 
-## Problem Statement
-
-FPLIP helps factory operations automatically detect production losses, downtime, and quality issues from BigQuery data sources. It delivers actionable performance intelligence so plant managers can reduce scrap, improve OEE, and prioritize root-cause fixes.
-
-## Quick Links
-- [Architecture Documentation](../docs/architecture/architecture.md)
-- [Data Dictionary](../docs/data-dictionary/data_dictionary.md)
-- [Operational Runbook](../docs/runbooks/runbook.md)
-- [ADR Log](../docs/adr/)
-- [Demo Video](<link-to-demo>)
-
-## Quickstart
-
-1. Clone the repository:
-
-```bash
-git clone <repository-url>
-cd FPLIP_project
+```text
+fplip-core/
+├── api/                          # FastAPI serving API (Endpoints, Auth, Caching)
+├── common/                       # GCP helper modules & authentication resolver
+├── contracts/                    # YAML Data Contracts (Schema & Validation rules)
+├── dags/                         # Airflow DAGs (Ingestion, Transformation, Data Quality)
+├── data/                         # Incoming synthetic manufacturing datasets
+├── dbt/                          # dbt BigQuery transformation models (Bronze, Silver, Gold)
+├── infra/                        # Terraform Infrastructure-as-Code scripts
+├── ingestion/                    # Extraction & synthetic data generation engines
+├── ml/                           # ML scrap risk classification model & training scripts
+├── scripts/                      # Operational pipeline execution scripts
+└── tests/                        # Integration & Unit test suite
 ```
 
-2. Create a GCP project and enable BigQuery API:
+---
 
+## 📸 Core Execution & Evidence Visuals
+
+### 1. Shift-Left Data Contracts & Synthetic Ingestion
+Incoming raw CSV logs are validated against YAML contract specifications before landing in BigQuery Bronze tables.
+
+![Data Contract Validation](../assets/screenshots/contract_validator.png)
+*Figure 1: Shift-Left YAML Data Contract Validation prior to BigQuery Ingestion*
+
+---
+
+### 2. Medallion Transformations & Automated Testing (`dbt`)
+Transforms raw event data into Silver dimensional models and Gold OEE analytical marts, verified across 85 schema, domain, and unit tests.
+
+![dbt Silver & Gold Models Execution](../assets/demo-screenshots/05_dbt_silver_gold_models_execution.png)
+*Figure 2: dbt Model Execution creating Silver dimensions/facts and Gold OEE data marts*
+
+![dbt Test Suite Execution](../assets/demo-screenshots/07_dbt_test_suite_execution.png)
+*Figure 3: dbt Test Suite execution displaying 85 passing assertions*
+
+---
+
+### 3. Workflow Orchestration (`Apache Airflow`)
+Orchestrates parallel ingestion, transformation, and data quality assertions with automated failure notification callbacks.
+
+![Airflow DAGs Overview](../assets/demo-screenshots/13_airflow_dags_overview.png)
+*Figure 4: Apache Airflow Web UI displaying active `ingestion_dag`, `dbt_transform_dag`, and `data_quality_dag`*
+
+---
+
+### 4. Machine Learning Scrap Risk Classifier
+Trains an interpretable Logistic Regression model to predict high-risk scrap batches in real time.
+
+![ML Scrap Model Training](../assets/demo-screenshots/12_full_dataset_ml_training_metrics.png)
+*Figure 5: Scikit-learn Logistic Regression Model Training Metrics and Confusion Matrix*
+
+---
+
+## 🛠️ Quick Start Guide
+
+### 1. Environment Setup
 ```bash
-gcloud projects create <your-project-id>
-gcloud config set project <your-project-id>
-gcloud services enable bigquery.googleapis.com
-```
-
-3. Set up Python environment:
-
-```bash
+cd fplip-core
 python -m venv .venv-fplip
-source .venv-fplip/bin/activate  # Windows: .venv-fplip\Scripts\activate
+source .venv-fplip/bin/activate  # On Windows: .venv-fplip\Scripts\activate
 pip install -r requirements.txt
-pip install dbt-core dbt-bigquery
 ```
 
-4. Update PROJECT_ID in:
-
-- `infra/terraform.tfvars`
-- `ingestion/bronze_loader.py`
-- `ingestion/master_data_loader.py`
-- `dbt/models/bronze/sources.yml`
-
-5. Apply Terraform:
-
+### 2. Run Pipeline via Unified CLI Entrypoint
 ```bash
-cd infra
-terraform init
-terraform apply -auto-approve
-cd ..
+./scripts/run_pipeline.sh
 ```
 
-6. Generate and load data:
-
-```bash
-python ingestion/synthetic/generate_sample_data.py --date $(date +%Y-%m-%d) --rows 50
-python -c "from ingestion.master_data_loader import load_master_file; load_master_file('data/incoming/machines.csv', 'machines'); ..."
-```
-
-7. Run dbt transformations:
-
+### 3. Run dbt Transformations & Test Suite
 ```bash
 cd dbt
 dbt deps
 dbt run --select fplip_silver fplip_gold
 dbt test --select fplip_silver fplip_gold
-cd ..
 ```
 
-8. Start the API:
-
+### 4. Start FastAPI Serving API
 ```bash
-export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/secrets/api-sa-key.json
-uvicorn api.main:app --host 0.0.0.0 --port 8000
+uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
+Access interactive OpenAPI documentation at `http://localhost:8000/docs`.
 
-## Business Impact
+---
 
-Estimated reduction in production loss by 5–10% through automated visibility into downtime, scrap, and quality deviations. (Verified after pilot deployment with sample manufacturing data.)
-
-## Dashboard
-
-The FPLIP dashboard visualizes OEE and scrap metrics from the Gold layer.
-
-- **Live Dashboard:** [View Demo](<your-youtube-link>)
-- **Dashboard Export:** [dashboard/](dashboard/)
-- **Screenshots:** [dashboard/screenshots/](dashboard/screenshots/)
-
-### Key Charts
-
-| Chart | Description |
-|-------|-------------|
-| OEE KPI Tiles | Current OEE, Availability, Performance, Quality |
-| OEE Trend by Machine | OEE over time, one line per machine |
-| OEE by Machine (Ranked) | Machine ranking by average OEE |
-| Loss Attribution | Stacked bar of Availability/Performance/Unmapped loss |
-| Scrap by Defect Category | Scrap volume by defect type |
-| Scrap by Machine | Scrap volume by machine |
-| Pass vs Fail Ratio | Overall quality pass/fail split |
-
-
-## Technology Stack
-
-| Layer | Technology |
-|-------|------------|
-| Cloud | GCP BigQuery Sandbox |
-| Infrastructure | Terraform |
-| Orchestration | Apache Airflow (via GitHub Actions) |
-| Transformation | dbt |
-| API | FastAPI |
-| CI/CD | GitHub Actions |
-| Language | Python |
-
-## Documentation
-
-- [Architecture](docs/architecture.md) — System design and decisions
-- [Data Dictionary](docs/data_dictionary.md) — Column definitions and business meaning
-- [Runbook](docs/runbook.md) — Operational procedures
-- [ADR Log](docs/adr/) — Architecture Decision Records
-- [dbt Docs](https://<your-github-username>.github.io/<your-repo>/dbt-docs/index.html) — Lineage graph
-- [Demo Video](https://link-to-demo/) — Walkthrough
-
+## 📑 Core Documentation
+- **[System Architecture](../docs/architecture/architecture.md)**
+- **[BigQuery Data Dictionary](../docs/data-dictionary/data_dictionary.md)**
+- **[Operational Runbook](../docs/runbooks/runbook.md)**

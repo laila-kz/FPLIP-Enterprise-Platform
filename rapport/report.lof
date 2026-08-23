@@ -1,0 +1,30 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces FPLIP high-level architecture diagram detailing the data pipeline from raw logs to operational applications.}}{14}{figure.3.1}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces GCP BigQuery Sandbox active project workspace verifying zero-cost cloud deployment and isolated dataset setup.}}{15}{figure.3.2}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Automated dbt Medallion Lineage Graph displaying Bronze staging views, Silver dimensions/facts, and Gold OEE data marts.}}{15}{figure.3.3}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Shift-left YAML data contract pre-ingestion validation output verifying non-null, type, and value range integrity.}}{18}{figure.4.1}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces BigQuery Sandbox table partition details displaying daily \texttt {\_ingested\_at} partition decorators and clustering.}}{20}{figure.4.2}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces dbt execution log building Silver staging views, dimensions, fact tables, and Gold OEE analytical marts.}}{21}{figure.4.3}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces dbt test suite execution verifying 85 assertions across generic schema tests, singular domain invariants, and unit tests.}}{24}{figure.4.4}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Apache Airflow Web UI DAG Overview displaying active orchestration DAGs (\texttt {ingestion\_dag}, \texttt {dbt\_transform\_dag}, \texttt {data\_quality\_dag}).}}{26}{figure.5.1}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces GitHub Actions 5-job CI/CD workflow execution success with ephemeral per-PR BigQuery dataset isolation.}}{27}{figure.5.2}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces FPLIP Investigate operational web application secure login interface with Role-Based Access Control (RBAC).}}{29}{figure.6.1}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Plant Signal Intelligence Dashboard showing live shift telemetry streams, OEE component breakdowns, and active signal cards.}}{29}{figure.6.2}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Active Anomaly Signal Cards displaying real-time OEE drops, scrap spikes, and direct investigation dispatch triggers.}}{30}{figure.6.3}%
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Grounded Gemini AI Operational Diagnostic drawer presenting executive summaries, recommended actions, and preventative countermeasures.}}{31}{figure.6.4}%
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Line Technician Root Cause Submission Form for submitting physical findings, corrective actions, and routing for manager approval.}}{31}{figure.6.5}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {7.1}{\ignorespaces Apache Superset 4-Row Storytelling OEE \& Scrap Root Cause Analytics Dashboard.}}{33}{figure.7.1}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {8.1}{\ignorespaces Scikit-learn Logistic Regression scrap risk prediction model training metrics, classification report, and confusion matrix.}}{35}{figure.8.1}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
