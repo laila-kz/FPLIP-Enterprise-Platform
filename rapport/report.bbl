@@ -1,0 +1,69 @@
+\begin{thebibliography}{10}
+
+\bibitem{nakajima_tpm}
+S.~Nakajima, {\em Introduction to TPM: Total Productive Maintenance}.
+\newblock Cambridge, MA: Productivity Press, 1988.
+
+\bibitem{iso_22400}
+``Automation systems and integration --- key performance indicators (kpis) for manufacturing operations management --- part 2: Definitions and descriptions,'' 2014.
+
+\bibitem{data_contracts_guide}
+A.~Reis, M.~Pruente, and S.~Gable, ``Data contracts: A practical guide to api-first data pipelines and governance,'' tech. rep., O'Reilly Media, 2023.
+
+\bibitem{kimball_dwtoolkit}
+R.~Kimball and M.~Ross, {\em The Data Warehouse Toolkit: The Definitive Guide to Dimensional Modeling}.
+\newblock Indianapolis, IN: John Wiley \& Sons, 3rd~ed., 2013.
+
+\bibitem{google_bq_sandbox}
+{Google Cloud}, ``Bigquery sandbox: Free tier and limits,'' 2026.
+\newblock Accessed: 2026-08-23.
+
+\bibitem{google_bq_dml_pricing}
+{Google Cloud}, ``Bigquery data manipulation language (dml) statements and execution limits,'' 2026.
+\newblock Accessed: 2026-08-23.
+
+\bibitem{armbrust_lakehouse}
+M.~Armbrust, A.~Ghodsi, R.~Xin, and M.~Zaharia, ``Lakehouse: A new generation of open platforms that unify data warehousing and advanced analytics,'' {\em Proceedings of the VLDB Endowment}, vol.~14, no.~12, pp.~28--38, 2021.
+
+\bibitem{databricks_medallion}
+{Databricks Inc.}, ``What is a medallion architecture?,'' 2024.
+\newblock Accessed: 2026-08-23.
+
+\bibitem{inmon_dw}
+W.~H. Inmon, {\em Building the Data Warehouse}.
+\newblock Indianapolis, IN: John Wiley \& Sons, 4th~ed., 2005.
+
+\bibitem{dbt_contracts}
+{dbt Labs}, ``dbt model contracts and data governance specifications,'' 2026.
+\newblock Accessed: 2026-08-23.
+
+\bibitem{kleppmann_ddia}
+M.~Kleppmann, {\em Designing Data-Intensive Applications: The Big Ideas Behind Reliable, Scalable, and Maintainable Systems}.
+\newblock Sebastopol, CA: O'Reilly Media, 2017.
+
+\bibitem{dbt_snapshots_docs}
+{dbt Labs}, ``dbt snapshots: Slowly changing dimensions,'' 2026.
+\newblock Accessed: 2026-08-23.
+
+\bibitem{ji_hallucination_survey}
+Z.~Ji, N.~Lee, R.~Frieske, T.~Yu, D.~Su, Y.~Xu, E.~Ishii, Y.~Yeung, M.~Del~Tredici, P.~Mok, and P.~Fung, ``Survey of hallucination in natural language generation,'' {\em ACM Computing Surveys}, vol.~55, no.~12, pp.~1--38, 2023.
+
+\bibitem{vaswani_attention}
+A.~Vaswani, N.~Shazeer, N.~Parmar, J.~Uszkoreit, L.~Jones, A.~N. Gomez, {\L}.~Kaiser, and I.~Polosukhin, ``Attention is all you need,'' {\em Advances in Neural Information Processing Systems}, vol.~30, pp.~5998--6008, 2017.
+
+\bibitem{anthropic_tool_use}
+{Anthropic}, ``Building grounded ai agents with function calling and tool use,'' 2026.
+\newblock Accessed: 2026-08-23.
+
+\bibitem{apache_airflow_docs}
+{Apache Foundation}, ``Apache airflow: Dag orchestration,'' 2026.
+\newblock Accessed: 2026-08-23.
+
+\bibitem{github_actions}
+{GitHub Inc.}, ``Github actions documentation: Ci/cd workflows and ephemeral environments,'' 2026.
+\newblock Accessed: 2026-08-23.
+
+\bibitem{kaufman_leakage}
+S.~Kaufman, S.~Rosset, C.~Perlich, and O.~Stitelman, ``Leakage in data mining: Formulation, detection, and avoidance,'' {\em ACM Transactions on Knowledge Discovery from Data (TKDD)}, vol.~6, no.~4, pp.~1--21, 2012.
+
+\end{thebibliography}
