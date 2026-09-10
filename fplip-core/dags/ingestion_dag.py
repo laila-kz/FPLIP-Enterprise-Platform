@@ -35,7 +35,7 @@ REPO_ROOT = resolve_repo_root()
 default_args = {
     "owner": "fplip",
     # CI-friendly: avoid long-running retry loops. Use 0 retries so failures
-    # surface immediately; change to 1 with a short delay if you prefer one retry.
+    # surface immediately; change to 1 with a short delay .
     "retries": 0,
     "retry_delay": timedelta(seconds=10),
     "retry_exponential_backoff": False,

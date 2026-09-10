@@ -2,9 +2,10 @@
 FPLIP API — FastAPI application entry point.
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from api.routers import health, oee, scrap, ml, ai, context
+from api.dependencies.auth import verify_api_key
 
 app = FastAPI(
     title="FPLIP API",
@@ -21,13 +22,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register routers
+# Public router
 app.include_router(health.router)
-app.include_router(context.router)
-app.include_router(oee.router)
-app.include_router(scrap.router)
-app.include_router(ml.router)
-app.include_router(ai.router)
+
+# Protected routers (require X-Internal-Key)
+auth_dependencies = [Depends(verify_api_key)]
+app.include_router(context.router, dependencies=auth_dependencies)
+app.include_router(oee.router, dependencies=auth_dependencies)
+app.include_router(scrap.router, dependencies=auth_dependencies)
+app.include_router(ml.router, dependencies=auth_dependencies)
+app.include_router(ai.router, dependencies=auth_dependencies)
 
 
 @app.get("/")

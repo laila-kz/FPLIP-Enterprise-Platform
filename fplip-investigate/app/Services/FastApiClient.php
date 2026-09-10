@@ -41,6 +41,7 @@ class FastApiClient
     {
         $response = Http::timeout($this->timeout)
             ->withHeaders([
+                'X-Internal-Key' => $this->apiKey,
                 'X-API-Key' => $this->apiKey,
                 'Accept' => 'application/json',
             ])
@@ -60,6 +61,7 @@ class FastApiClient
     {
         $response = Http::timeout($this->timeout)
             ->withHeaders([
+                'X-Internal-Key' => $this->apiKey,
                 'X-API-Key' => $this->apiKey,
                 'Accept' => 'application/json',
             ])
@@ -83,6 +85,7 @@ class FastApiClient
     {
         $response = Http::timeout($this->timeout)
             ->withHeaders([
+                'X-Internal-Key' => $this->apiKey,
                 'X-API-Key' => $this->apiKey,
                 'Accept' => 'application/json',
             ])
@@ -107,6 +110,7 @@ class FastApiClient
     {
         $response = Http::timeout($this->timeout)
             ->withHeaders([
+                'X-Internal-Key' => $this->apiKey,
                 'X-API-Key' => $this->apiKey,
                 'Accept' => 'application/json',
             ])

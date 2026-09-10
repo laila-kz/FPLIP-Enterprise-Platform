@@ -1,0 +1,7 @@
+.git
+.env
+node_modules
+vendor
+storage/*.key
+.phpunit.result.cache
+npm-debug.log

@@ -29,6 +29,8 @@ class Settings:
     
     # API Key (app-level authentication)
     api_key: str = os.getenv("API_KEY", "")
+    internal_api_key: str = os.getenv("INTERNAL_API_KEY", os.getenv("API_KEY", ""))
+    enforce_internal_key: bool = os.getenv("ENFORCE_INTERNAL_KEY", "true").lower() in ("true", "1", "yes")
 
 
 @lru_cache
