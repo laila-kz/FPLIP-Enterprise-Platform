@@ -1,0 +1,8 @@
+# Ignore everything by default
+*
+
+# Allowlist only the files required to build the container
+!Dockerfile
+!docker-entrypoint.sh
+!requirements.txt
+!superset_config.py

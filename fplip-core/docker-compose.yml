@@ -42,7 +42,8 @@ services:
     image: apache/airflow:2.9.3
     container_name: fplip-airflow-webserver
     depends_on:
-      - airflow-init
+      airflow-init:
+        condition: service_completed_successfully
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
@@ -67,7 +68,8 @@ services:
     image: apache/airflow:2.9.3
     container_name: fplip-airflow-scheduler
     depends_on:
-      - airflow-init
+      airflow-init:
+        condition: service_completed_successfully
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
@@ -125,6 +127,23 @@ services:
     depends_on:
       - api
 
+  superset:
+    build:
+      context: ../fplip-bi
+      dockerfile: Dockerfile
+    container_name: fplip-superset
+    ports:
+      - "8088:8088"
+    environment:
+      - SUPERSET_SECRET_KEY=fplip_secure_superset_secret_key_2026_dev_prod
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=admin
+      - GOOGLE_APPLICATION_CREDENTIALS=/secrets/api-sa-key.json
+    volumes:
+      - superset-home:/app/superset_home
+      - ./secrets:/secrets:ro
+    restart: unless-stopped
+
   proxy:
     image: nginx:alpine
     container_name: fplip-proxy
@@ -144,3 +163,4 @@ services:
 volumes:
   airflow-db-data:
   airflow-venv:
+  superset-home:

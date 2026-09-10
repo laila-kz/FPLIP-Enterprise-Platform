@@ -1,0 +1,20 @@
+services:
+  superset:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fplip-superset
+    ports:
+      - "8088:8088"
+    environment:
+      - SUPERSET_SECRET_KEY=fplip_secure_superset_secret_key_2026_dev_prod
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=admin
+      - GOOGLE_APPLICATION_CREDENTIALS=/secrets/api-sa-key.json
+    volumes:
+      - superset-home:/app/superset_home
+      - ../fplip-core/secrets:/secrets:ro
+    restart: unless-stopped
+
+volumes:
+  superset-home:
