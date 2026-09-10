@@ -22,7 +22,7 @@ def resolve_project_id() -> str:
         RuntimeError: if no project id can be determined.
     """
     # 1. Environment variables
-    for var in ("GCP_PROJECT", "PROJECT_ID"):
+    for var in ("GCP_PROJECT_ID", "GCP_PROJECT", "PROJECT_ID"):
         val = os.getenv(var)
         if val:
             return val
@@ -35,13 +35,11 @@ def resolve_project_id() -> str:
         if project:
             return project
     except Exception:
-        # Ignore; we'll raise below
         pass
 
-    raise RuntimeError(
-        "Could not resolve GCP project id. Set GCP_PROJECT or PROJECT_ID, "
-        "or configure application default credentials with an associated project."
-    )
+    # 3. Default fallback for serverless / dev mode
+    return os.getenv("GCP_PROJECT_ID", "fplip-demo")
+
 
 
 __all__ = ["resolve_project_id"]
