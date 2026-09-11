@@ -55,7 +55,50 @@ Floor-level repair logging, physical finding description, corrective action entr
 
 ---
 
-## 🚀 Setup & Execution
+## 🌐 Live Production Deployment
+
+**FPLIP Investigate** is deployed and active on **Vercel Serverless Infrastructure**:
+
+- **Live Application URL**: **[https://fplip-investigate-f.vercel.app](https://fplip-investigate-f.vercel.app)**
+
+### 🔑 Pre-Seeded Test Credentials
+The login portal features convenient 1-click test buttons for instantaneous role switching:
+- **Plant Manager**: `manager@fplip.test` / Password: `password`
+- **Line Technician**: `technician1@fplip.test` / Password: `password`
+
+### Serverless Architecture on Vercel (`api/index.php` + `vercel.json`)
+- **Runtime**: `vercel-php@0.7.3` serverless function.
+- **Dynamic File Storage**: Automatically prepares `/tmp/storage` and symlinks SQLite database for zero-downtime serverless execution.
+- **Asset Bundling**: Automated Vite asset compilation to `public/build` served via CDN edge caching with forced HTTPS.
+
+---
+
+## 🐳 Docker Containerization (`Dockerfile`)
+
+The application features a fully optimized multi-stage Docker build:
+
+### Build & Run via Docker
+```bash
+cd fplip-investigate
+
+# 1. Build the multi-stage Docker image
+docker build -t fplip-investigate .
+
+# 2. Run the container on port 8081
+docker run -d -p 8081:8081 --name fplip-investigate-app fplip-investigate
+
+# 3. View container logs
+docker logs -f fplip-investigate-app
+```
+
+- **Access URL**: `http://localhost:8081`
+- **Multi-Stage Structure**:
+  - `Stage 1 (Node 20 Alpine)`: Compiles Tailwind CSS and Vite bundle to `/app/public/build`.
+  - `Stage 2 (PHP 8.2 CLI)`: Lean production runtime with SQLite PDO, Zip, BCMath, and automated database seeder entrypoint (`docker-entrypoint.sh`).
+
+---
+
+## 🚀 Local Development Setup
 
 ### Prerequisites
 - PHP $\ge$ 8.2
@@ -93,7 +136,8 @@ Access the application in your browser at `http://localhost:8081`.
 FPLIP Investigate connects to `fplip-core` FastAPI serving endpoints via standard HTTP client calls configured in `.env`:
 
 ```env
-FASTAPI_BASE_URL=http://127.0.0.1:8000
+FASTAPI_BASE_URL=https://fplip-api.vercel.app
 FASTAPI_API_KEY=your_api_key_here
 FASTAPI_TIMEOUT=90
 ```
+
